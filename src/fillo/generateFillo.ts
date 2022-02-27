@@ -3,7 +3,7 @@ import { verifyFillomino } from './verifyFillo'
 
 export const generateFillomino = (seed: number, gridSize: number): string => {
   let solution = ''
-  const rand = create()
+  const rand = create(`${seed}`)
 
   do {
     const p = 0.4
