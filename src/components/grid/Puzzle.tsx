@@ -18,7 +18,7 @@ export const Puzzle = ({
   gridSize,
 }: Props) => {
   return (
-    <div className="flex wrap pb-6">
+    <div className="flex justify-center wrap pb-6">
       {guesses.map((guess, i) => (
         <CompletedGrid
           key={i}

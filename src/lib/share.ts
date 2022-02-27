@@ -27,51 +27,59 @@ export const generateEmojiGrid = (
   tiles: string[],
   gridSize: number
 ) => {
-  return guesses
-    .map((guess) => {
-      const status = getGuessStatuses(guess, gridSize)
-      return guess
-        .split('')
-        .map((_, i) => {
-          switch (status[i]) {
-            case 'correct':
-              return tiles[0]
-            case 'present':
-              return tiles[1]
-            default:
-              return tiles[2]
-          }
-        })
-        // I'm sorry for the following.
-        // ['a', 'b', 'c', 'd'] => [['a', 'b'], ['c', 'd']]
-        .reduce((resultArray: string[][], item: string, index: number) => {
-            const chunkIndex = Math.floor(index / gridSize)
-            if (!resultArray[chunkIndex]) resultArray[chunkIndex] = []
-            resultArray[chunkIndex].push(item)
-            return resultArray
-        }, [])
-        // [['a', 'b'], ['c', 'd'] => ['ab', 'cd']
-        .map((line)=>line.join(''))
-    })
-    // [['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl'], ['mn', 'op']] => [[['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl']], [['mn', 'op']]]
-    .reduce((resultArray: string[][][], item: string[], index: number) => {
-      const chunkIndex = Math.floor(index / SHARED_GRIDS_PER_LINE)
-      if (!resultArray[chunkIndex]) resultArray[chunkIndex] = []
-      resultArray[chunkIndex].push(item)
-      return resultArray
-    }, [])
-    // [[['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl']], [['mn', 'op']]] => ['ab ef ij\ncd gh kl', 'mn\nop']
-    .map((lineBlock) => {
-      return lineBlock
-        // [['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl']] => ['ab ef ij', 'cd gh kl']
-        .reduce((resultArray: string[], item: string[], index: number) => {
-          return resultArray.map((entry, i) => entry.concat(' ', item[i]))
-        }, Array(gridSize).fill(''))
-        // ['ab ef ij', 'cd gh kl'] => 'ab ef ij\ncd gh kl'
-        .join('\n')
-    })
-    // ['ab ef ij\ncd gh kl', 'mn\nop'] => 'ab ef ij\ncd gh kl\n\nmn\nop'
-    .join('\n\n')
+  return (
+    guesses
+      .map((guess) => {
+        const status = getGuessStatuses(guess, gridSize)
+        return (
+          guess
+            .split('')
+            .map((_, i) => {
+              switch (status[i]) {
+                case 'correct':
+                  return tiles[0]
+                case 'present':
+                  return tiles[1]
+                default:
+                  return tiles[2]
+              }
+            })
+            // I'm sorry for the following.
+            // ['a', 'b', 'c', 'd'] => [['a', 'b'], ['c', 'd']]
+            .reduce((resultArray: string[][], item: string, index: number) => {
+              const chunkIndex = Math.floor(index / gridSize)
+              if (!resultArray[chunkIndex]) resultArray[chunkIndex] = []
+              resultArray[chunkIndex].push(item)
+              return resultArray
+            }, [])
+            // [['a', 'b'], ['c', 'd'] => ['ab', 'cd']
+            .map((line) => line.join(''))
+        )
+      })
+      // [['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl'], ['mn', 'op']] => [[['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl']], [['mn', 'op']]]
+      .reduce((resultArray: string[][][], item: string[], index: number) => {
+        const chunkIndex = Math.floor(index / SHARED_GRIDS_PER_LINE)
+        if (!resultArray[chunkIndex]) resultArray[chunkIndex] = []
+        resultArray[chunkIndex].push(item)
+        return resultArray
+      }, [])
+      // [[['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl']], [['mn', 'op']]] => ['ab ef ij\ncd gh kl', 'mn\nop']
+      .map((lineBlock) => {
+        return (
+          lineBlock
+            // [['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl']] => ['ab ef ij', 'cd gh kl']
+            .reduce((resultArray: string[], item: string[], index: number) => {
+              return resultArray.map((entry, i) =>
+                entry.concat(index === 0 ? '' : ' ', item[i])
+              )
+            }, Array(gridSize).fill(''))
+            // ['ab ef ij', 'cd gh kl'] => 'ab ef ij\ncd gh kl'
+            .join('\n')
+        )
+      })
+      // ['ab ef ij\ncd gh kl', 'mn\nop'] => 'ab ef ij\ncd gh kl\n\nmn\nop'
+      .join('\n\n')
+  )
 }
 
 const getEmojiTiles = (isDarkMode: boolean, isHighContrastMode: boolean) => {
