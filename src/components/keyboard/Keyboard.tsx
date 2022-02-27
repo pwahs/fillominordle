@@ -3,6 +3,7 @@ import { Key } from './Key'
 import { useEffect } from 'react'
 import { ENTER_TEXT, DELETE_TEXT } from '../../constants/strings'
 import { localeAwareUpperCase } from '../../lib/words'
+import { KEY_DELAY_MS } from '../../constants/settings'
 
 type Props = {
   onChar: (value: string) => void
@@ -10,7 +11,7 @@ type Props = {
   onEnter: () => void
   guesses: string[]
   isRevealing?: boolean
-  keyDelayMs: number
+  gridSize: number
 }
 
 export const Keyboard = ({
@@ -19,9 +20,10 @@ export const Keyboard = ({
   onEnter,
   guesses,
   isRevealing,
-  keyDelayMs,
+  gridSize,
 }: Props) => {
-  const charStatuses = getStatuses(guesses)
+  const keyDelayMs = KEY_DELAY_MS(gridSize)
+  const charStatuses = getStatuses(guesses, gridSize)
 
   const onClick = (value: string) => {
     if (value === 'ENTER') {

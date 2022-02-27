@@ -9,7 +9,7 @@ type Props = {
 }
 
 export const CompletedGrid = ({ gridSize, guess, isRevealing }: Props) => {
-  const statuses = splitStatuses(getGuessStatuses(guess), gridSize)
+  const statuses = splitStatuses(getGuessStatuses(guess, gridSize), gridSize)
   const rows = splitGuess(guess, gridSize)
 
   return (

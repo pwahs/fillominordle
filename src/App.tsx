@@ -1,44 +1,43 @@
 import {
-  InformationCircleIcon,
   ChartBarIcon,
   CogIcon,
+  InformationCircleIcon,
 } from '@heroicons/react/outline'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Puzzle } from './components/grid/Puzzle'
 import { Keyboard } from './components/keyboard/Keyboard'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
 import { SettingsModal } from './components/modals/SettingsModal'
 import {
-  GAME_TITLE,
-  WIN_MESSAGES,
-  GAME_COPIED_MESSAGE,
-  NOT_ENOUGH_LETTERS_MESSAGE,
-  WORD_NOT_FOUND_MESSAGE,
   CORRECT_WORD_MESSAGE,
+  GAME_COPIED_MESSAGE,
+  GAME_TITLE,
   HARD_MODE_ALERT_MESSAGE,
+  NOT_ENOUGH_LETTERS_MESSAGE,
+  WIN_MESSAGES,
+  WORD_NOT_FOUND_MESSAGE,
 } from './constants/strings'
 import {
-  MAX_CHALLENGES,
   GAME_END_DELAY,
+  MAX_CHALLENGES,
   WELCOME_INFO_MODAL_MS,
-  KEY_DELAY_MS,
 } from './constants/settings'
 import {
-  isWordInWordList,
-  isWinningWord,
-  solution,
   findFirstUnusedReveal,
+  isWinningWord,
+  isWordInWordList,
+  solutions,
   unicodeLength,
 } from './lib/words'
 import { addStatsForCompletedGame, loadStats } from './lib/stats'
 import {
+  getStoredGridSize,
+  getStoredIsHighContrastMode,
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
-  setStoredIsHighContrastMode,
-  getStoredIsHighContrastMode,
   setStoredGridSize,
-  getStoredGridSize,
+  setStoredIsHighContrastMode,
 } from './lib/localStorage'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
@@ -72,16 +71,16 @@ function App() {
   const [isRevealing, setIsRevealing] = useState(false)
   const [guesses, setGuesses] = useState<string[]>(() => {
     const loaded = loadGameStateFromLocalStorage()
-    if (loaded?.solution !== solution) {
+    if (loaded?.solutions !== solutions) {
       return []
     }
-    const gameWasWon = loaded.guesses.includes(solution)
+    const gameWasWon = loaded.guesses.includes(solutions[gridSize])
     if (gameWasWon) {
       setIsGameWon(true)
     }
     if (loaded.guesses.length === MAX_CHALLENGES && !gameWasWon) {
       setIsGameLost(true)
-      showErrorAlert(CORRECT_WORD_MESSAGE(solution), {
+      showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
         persist: true,
       })
     }
@@ -150,7 +149,7 @@ function App() {
   }
 
   useEffect(() => {
-    saveGameStateToLocalStorage({ guesses, solution })
+    saveGameStateToLocalStorage({ guesses, solutions })
   }, [guesses])
 
   useEffect(() => {
@@ -209,7 +208,11 @@ function App() {
 
     // enforce hard mode - all guesses must contain all previously revealed letters
     if (isHardMode) {
-      const firstMissingReveal = findFirstUnusedReveal(currentGuess, guesses)
+      const firstMissingReveal = findFirstUnusedReveal(
+        currentGuess,
+        guesses,
+        gridSize
+      )
       if (firstMissingReveal) {
         setCurrentRowClass('jiggle')
         return showErrorAlert(firstMissingReveal, {
@@ -225,7 +228,7 @@ function App() {
       setIsRevealing(false)
     }, GAME_END_DELAY(gridSize))
 
-    const winningWord = isWinningWord(currentGuess)
+    const winningWord = isWinningWord(currentGuess, gridSize)
 
     if (
       unicodeLength(currentGuess) === gridSize * gridSize &&
@@ -243,7 +246,7 @@ function App() {
       if (guesses.length === MAX_CHALLENGES - 1) {
         setStats(addStatsForCompletedGame(stats, guesses.length + 1))
         setIsGameLost(true)
-        showErrorAlert(CORRECT_WORD_MESSAGE(solution), {
+        showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
           persist: true,
           delayMs: GAME_END_DELAY(gridSize),
         })
@@ -283,7 +286,7 @@ function App() {
         onEnter={onEnter}
         guesses={guesses}
         isRevealing={isRevealing}
-        keyDelayMs={KEY_DELAY_MS(gridSize)}
+        gridSize={gridSize}
       />
       <InfoModal
         isOpen={isInfoModalOpen}
@@ -300,6 +303,7 @@ function App() {
         isHardMode={isHardMode}
         isDarkMode={isDarkMode}
         isHighContrastMode={isHighContrastMode}
+        gridSize={gridSize}
       />
       <SettingsModal
         isOpen={isSettingsModalOpen}

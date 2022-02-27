@@ -8,20 +8,29 @@ export const shareStatus = (
   lost: boolean,
   isHardMode: boolean,
   isDarkMode: boolean,
-  isHighContrastMode: boolean
+  isHighContrastMode: boolean,
+  gridSize: number
 ) => {
   navigator.clipboard.writeText(
     `${GAME_TITLE} ${solutionIndex} ${
       lost ? 'X' : guesses.length
     }/${MAX_CHALLENGES}${isHardMode ? '*' : ''}\n\n` +
-      generateEmojiGrid(guesses, getEmojiTiles(isDarkMode, isHighContrastMode))
+      generateEmojiGrid(
+        guesses,
+        getEmojiTiles(isDarkMode, isHighContrastMode),
+        gridSize
+      )
   )
 }
 
-export const generateEmojiGrid = (guesses: string[], tiles: string[]) => {
+export const generateEmojiGrid = (
+  guesses: string[],
+  tiles: string[],
+  gridSize: number
+) => {
   return guesses
     .map((guess) => {
-      const status = getGuessStatuses(guess)
+      const status = getGuessStatuses(guess, gridSize)
       return guess
         .split('')
         .map((_, i) => {

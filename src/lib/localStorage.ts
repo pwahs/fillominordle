@@ -4,7 +4,7 @@ const gridSizeKey = 'gridSize'
 
 type StoredGameState = {
   guesses: string[]
-  solution: string
+  solutions: { [gridSize: number]: string }
 }
 
 export const saveGameStateToLocalStorage = (gameState: StoredGameState) => {
@@ -54,6 +54,5 @@ export const setStoredGridSize = (gridSize: number) => {
 }
 
 export const getStoredGridSize = () => {
-  const gridSize = parseInt(localStorage.getItem(gridSizeKey) ?? '4')
-  return gridSize
+  return parseInt(localStorage.getItem(gridSizeKey) ?? '4')
 }

@@ -3,6 +3,7 @@ import { CharStatus, getGuessStatuses } from './statuses'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 import { verifyFillomino } from '../fillo/verifyFillo'
 import { generateFillomino } from '../fillo/generateFillo'
+import { GRID_SIZES } from '../constants/settings'
 
 export const isWordInWordList = (gridSize: number, word: string) => {
   return verifyFillomino(gridSize, word)
@@ -10,21 +11,25 @@ export const isWordInWordList = (gridSize: number, word: string) => {
   //VALID_GUESSES.includes(localeAwareLowerCase(word))
 }
 
-export const isWinningWord = (word: string) => {
-  return solution === word
+export const isWinningWord = (word: string, gridSize: number) => {
+  return solutions[gridSize] === word
 }
 
 // build a set of previously revealed letters - present and correct
 // guess must use correct letters in that space and any other revealed letters
 // also check if all revealed instances of a letter are used (i.e. two C's)
-export const findFirstUnusedReveal = (word: string, guesses: string[]) => {
+export const findFirstUnusedReveal = (
+  word: string,
+  guesses: string[],
+  gridSize: number
+) => {
   if (guesses.length === 0) {
     return false
   }
 
   const lettersLeftArray = new Array<string>()
   const guess = guesses[guesses.length - 1]
-  const statuses = getGuessStatuses(guess)
+  const statuses = getGuessStatuses(guess, gridSize)
 
   for (let i = 0; i < guess.length; i++) {
     if (statuses[i] === 'correct' || statuses[i] === 'present') {
@@ -71,19 +76,13 @@ export const unicodeLength = (word: string) => {
   return unicodeSplit(word).length
 }
 
-export const localeAwareLowerCase = (text: string) => {
-  return process.env.REACT_APP_LOCALE_STRING
-    ? text.toLocaleLowerCase(process.env.REACT_APP_LOCALE_STRING)
-    : text.toLowerCase()
-}
-
 export const localeAwareUpperCase = (text: string) => {
   return process.env.REACT_APP_LOCALE_STRING
     ? text.toLocaleUpperCase(process.env.REACT_APP_LOCALE_STRING)
     : text.toUpperCase()
 }
 
-export const getWordOfDay = (gridSize: number) => {
+const getPuzzlesOfDay = () => {
   // January 1, 2022 Game Epoch
   const epochMs = new Date('January 1, 2022 00:00:00').valueOf()
   const now = Date.now()
@@ -92,10 +91,15 @@ export const getWordOfDay = (gridSize: number) => {
   const nextday = (index + 1) * msInDay + epochMs
 
   return {
-    solution: generateFillomino(index, gridSize),
+    solutions: Object.fromEntries(
+      GRID_SIZES.map((gridSize) => [
+        gridSize,
+        generateFillomino(index, gridSize),
+      ])
+    ),
     solutionIndex: index,
     tomorrow: nextday,
   }
 }
 
-export const { solution, solutionIndex, tomorrow } = getWordOfDay(4)
+export const { solutions, solutionIndex, tomorrow } = getPuzzlesOfDay()
