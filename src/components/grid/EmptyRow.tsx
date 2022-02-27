@@ -1,11 +1,15 @@
-import { MAX_WORD_LENGTH } from '../../constants/settings'
+import { FC } from 'react'
 import { Cell } from './Cell'
 
-export const EmptyRow = () => {
-  const emptyCells = Array.from(Array(MAX_WORD_LENGTH))
+type Props = {
+  gridSize: number
+}
+
+export const EmptyRow: FC<Props> = ({ gridSize }) => {
+  const emptyCells = Array.from(Array(gridSize))
 
   return (
-    <div className="flex justify-center mb-1">
+    <div className="flex justify-center mb-1 emptyrow">
       {emptyCells.map((_, i) => (
         <Cell key={i} />
       ))}

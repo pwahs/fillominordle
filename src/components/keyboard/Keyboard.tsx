@@ -10,6 +10,7 @@ type Props = {
   onEnter: () => void
   guesses: string[]
   isRevealing?: boolean
+  keyDelayMs: number
 }
 
 export const Keyboard = ({
@@ -18,6 +19,7 @@ export const Keyboard = ({
   onEnter,
   guesses,
   isRevealing,
+  keyDelayMs,
 }: Props) => {
   const charStatuses = getStatuses(guesses)
 
@@ -40,7 +42,7 @@ export const Keyboard = ({
       } else {
         const key = localeAwareUpperCase(e.key)
         // TODO: check this test if the range works with non-english letters
-        if (key.length === 1 && key >= 'A' && key <= 'Z') {
+        if (key.length === 1 && key >= '1' && key <= '9') {
           onChar(key)
         }
       }
@@ -54,43 +56,46 @@ export const Keyboard = ({
   return (
     <div>
       <div className="flex justify-center mb-1">
-        {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((key) => (
+        {['1', '2', '3'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
             status={charStatuses[key]}
             isRevealing={isRevealing}
+            keyDelayMs={keyDelayMs}
           />
         ))}
       </div>
       <div className="flex justify-center mb-1">
-        {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((key) => (
-          <Key
-            value={key}
-            key={key}
-            onClick={onClick}
-            status={charStatuses[key]}
-            isRevealing={isRevealing}
-          />
-        ))}
-      </div>
-      <div className="flex justify-center">
-        <Key width={65.4} value="ENTER" onClick={onClick}>
+        <Key width={65.4} value="ENTER" onClick={onClick} keyDelayMs={keyDelayMs}>
           {ENTER_TEXT}
         </Key>
-        {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
+        {['4', '5', '6'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
             status={charStatuses[key]}
             isRevealing={isRevealing}
+            keyDelayMs={keyDelayMs}
           />
         ))}
-        <Key width={65.4} value="DELETE" onClick={onClick}>
+        <Key width={65.4} value="DELETE" onClick={onClick} keyDelayMs={keyDelayMs}>
           {DELETE_TEXT}
         </Key>
+      </div>
+      <div className="flex justify-center mb-1">
+        {['7', '8', '9'].map((key) => (
+          <Key
+            value={key}
+            key={key}
+            onClick={onClick}
+            status={charStatuses[key]}
+            isRevealing={isRevealing}
+            keyDelayMs={keyDelayMs}
+          />
+        ))}
       </div>
     </div>
   )

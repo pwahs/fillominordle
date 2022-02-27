@@ -4,7 +4,7 @@ import {
   CogIcon,
 } from '@heroicons/react/outline'
 import { useState, useEffect } from 'react'
-import { Grid } from './components/grid/Grid'
+import { Puzzle } from './components/grid/Puzzle'
 import { Keyboard } from './components/keyboard/Keyboard'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
@@ -19,11 +19,10 @@ import {
   HARD_MODE_ALERT_MESSAGE,
 } from './constants/strings'
 import {
-  MAX_WORD_LENGTH,
   MAX_CHALLENGES,
-  REVEAL_TIME_MS,
-  GAME_LOST_INFO_DELAY,
+  GAME_END_DELAY,
   WELCOME_INFO_MODAL_MS,
+  KEY_DELAY_MS,
 } from './constants/settings'
 import {
   isWordInWordList,
@@ -38,6 +37,8 @@ import {
   saveGameStateToLocalStorage,
   setStoredIsHighContrastMode,
   getStoredIsHighContrastMode,
+  setStoredGridSize,
+  getStoredGridSize,
 } from './lib/localStorage'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
@@ -69,6 +70,7 @@ function App() {
   const [isHighContrastMode, setIsHighContrastMode] = useState(
     getStoredIsHighContrastMode()
   )
+  const [gridSize, setGridSize] = useState(getStoredGridSize())
   const [isRevealing, setIsRevealing] = useState(false)
   const [guesses, setGuesses] = useState<string[]>(() => {
     const loaded = loadGameStateFromLocalStorage()
@@ -139,6 +141,12 @@ function App() {
     setStoredIsHighContrastMode(isHighContrast)
   }
 
+  const handleGridSize = (isSmall: boolean) => {
+    const gridSize = isSmall ? 3 : 4
+    setGridSize(gridSize)
+    setStoredGridSize(gridSize)
+  }
+
   const clearCurrentRowClass = () => {
     setCurrentRowClass('')
   }
@@ -151,7 +159,7 @@ function App() {
     if (isGameWon) {
       const winMessage =
         WIN_MESSAGES[Math.floor(Math.random() * WIN_MESSAGES.length)]
-      const delayMs = REVEAL_TIME_MS * MAX_WORD_LENGTH
+      const delayMs = GAME_END_DELAY(gridSize)
 
       showSuccessAlert(winMessage, {
         delayMs,
@@ -162,13 +170,13 @@ function App() {
     if (isGameLost) {
       setTimeout(() => {
         setIsStatsModalOpen(true)
-      }, GAME_LOST_INFO_DELAY)
+      }, GAME_END_DELAY(gridSize))
     }
   }, [isGameWon, isGameLost, showSuccessAlert])
 
   const onChar = (value: string) => {
     if (
-      unicodeLength(`${currentGuess}${value}`) <= MAX_WORD_LENGTH &&
+      unicodeLength(`${currentGuess}${value}`) <= gridSize * gridSize &&
       guesses.length < MAX_CHALLENGES &&
       !isGameWon
     ) {
@@ -187,14 +195,14 @@ function App() {
       return
     }
 
-    if (!(unicodeLength(currentGuess) === MAX_WORD_LENGTH)) {
+    if (!(unicodeLength(currentGuess) === gridSize * gridSize)) {
       setCurrentRowClass('jiggle')
       return showErrorAlert(NOT_ENOUGH_LETTERS_MESSAGE, {
         onClose: clearCurrentRowClass,
       })
     }
 
-    if (!isWordInWordList(currentGuess)) {
+    if (!isWordInWordList(gridSize, currentGuess)) {
       setCurrentRowClass('jiggle')
       return showErrorAlert(WORD_NOT_FOUND_MESSAGE, {
         onClose: clearCurrentRowClass,
@@ -217,12 +225,12 @@ function App() {
     // chars have been revealed
     setTimeout(() => {
       setIsRevealing(false)
-    }, REVEAL_TIME_MS * MAX_WORD_LENGTH)
+    }, GAME_END_DELAY(gridSize))
 
     const winningWord = isWinningWord(currentGuess)
 
     if (
-      unicodeLength(currentGuess) === MAX_WORD_LENGTH &&
+      unicodeLength(currentGuess) === gridSize * gridSize &&
       guesses.length < MAX_CHALLENGES &&
       !isGameWon
     ) {
@@ -239,7 +247,7 @@ function App() {
         setIsGameLost(true)
         showErrorAlert(CORRECT_WORD_MESSAGE(solution), {
           persist: true,
-          delayMs: REVEAL_TIME_MS * MAX_WORD_LENGTH + 1,
+          delayMs: GAME_END_DELAY(gridSize),
         })
       }
     }
@@ -264,11 +272,12 @@ function App() {
           onClick={() => setIsSettingsModalOpen(true)}
         />
       </div>
-      <Grid
+      <Puzzle
         guesses={guesses}
         currentGuess={currentGuess}
         isRevealing={isRevealing}
         currentRowClassName={currentRowClass}
+        gridSize={gridSize}
       />
       <Keyboard
         onChar={onChar}
@@ -276,6 +285,7 @@ function App() {
         onEnter={onEnter}
         guesses={guesses}
         isRevealing={isRevealing}
+        keyDelayMs={KEY_DELAY_MS(gridSize)}
       />
       <InfoModal
         isOpen={isInfoModalOpen}
@@ -302,6 +312,8 @@ function App() {
         handleDarkMode={handleDarkMode}
         isHighContrastMode={isHighContrastMode}
         handleHighContrastMode={handleHighContrastMode}
+        gridSize={gridSize}
+        handleGridSize={handleGridSize}
       />
 
       <AlertContainer />

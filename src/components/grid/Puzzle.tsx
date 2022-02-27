@@ -1,20 +1,22 @@
 import { MAX_CHALLENGES } from '../../constants/settings'
-import { CompletedRow } from './CompletedRow'
-import { CurrentRow } from './CurrentRow'
-import { EmptyRow } from './EmptyRow'
+import { CompletedGrid } from './CompletedGrid'
+import { CurrentGrid } from './CurrentGrid'
+import { EmptyGrid } from './EmptyGrid'
 
 type Props = {
   guesses: string[]
   currentGuess: string
   isRevealing?: boolean
   currentRowClassName: string
+  gridSize: number
 }
 
-export const Grid = ({
+export const Puzzle = ({
   guesses,
   currentGuess,
   isRevealing,
   currentRowClassName,
+  gridSize,
 }: Props) => {
   const empties =
     guesses.length < MAX_CHALLENGES - 1
@@ -22,20 +24,26 @@ export const Grid = ({
       : []
 
   return (
-    <div className="pb-6">
+    <div className="flex wrap pb-6">
       {guesses.map((guess, i) => (
-        <CompletedRow
+        <CompletedGrid
           key={i}
+          gridSize={gridSize}
           guess={guess}
           isRevealing={isRevealing && guesses.length - 1 === i}
         />
       ))}
       {guesses.length < MAX_CHALLENGES && (
-        <CurrentRow guess={currentGuess} className={currentRowClassName} />
+        <CurrentGrid
+          gridSize={gridSize}
+          guess={currentGuess}
+          className={currentRowClassName}
+        />
       )}
-      {empties.map((_, i) => (
-        <EmptyRow key={i} />
-      ))}
     </div>
   )
 }
+
+      //{empties.map((_, i) => (
+        //<EmptyGrid gridSize={gridSize} key={i} />
+      //))}

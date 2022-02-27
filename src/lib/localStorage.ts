@@ -1,5 +1,6 @@
 const gameStateKey = 'gameState'
 const highContrastKey = 'highContrast'
+const gridSizeKey = 'gridSize'
 
 type StoredGameState = {
   guesses: string[]
@@ -46,4 +47,13 @@ export const setStoredIsHighContrastMode = (isHighContrast: boolean) => {
 export const getStoredIsHighContrastMode = () => {
   const highContrast = localStorage.getItem(highContrastKey)
   return highContrast === '1'
+}
+
+export const setStoredGridSize = (gridSize: number) => {
+  localStorage.setItem(gridSizeKey, `${gridSize}`)
+}
+
+export const getStoredGridSize = () => {
+  const gridSize = parseInt(localStorage.getItem(gridSizeKey) ?? '4')
+  return gridSize
 }

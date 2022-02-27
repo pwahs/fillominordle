@@ -1,13 +1,16 @@
 import { WORDS } from '../constants/wordlist'
-import { VALID_GUESSES } from '../constants/validGuesses'
 import { WRONG_SPOT_MESSAGE, NOT_CONTAINED_MESSAGE } from '../constants/strings'
-import { getGuessStatuses } from './statuses'
+import { CharStatus, getGuessStatuses } from './statuses'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
+import { verifyFillomino } from '../fillo/verifyFillo'
+import { generateFillomino } from '../fillo/generateFillo'
 
-export const isWordInWordList = (word: string) => {
+export const isWordInWordList = (gridSize: number, word: string) => {
   return (
-    WORDS.includes(localeAwareLowerCase(word)) ||
-    VALID_GUESSES.includes(localeAwareLowerCase(word))
+    verifyFillomino(gridSize, word)
+    //WORDS.includes(localeAwareLowerCase(word)) ||
+    //VALID_GUESSES.includes(localeAwareLowerCase(word))
+
   )
 }
 
@@ -52,6 +55,18 @@ export const findFirstUnusedReveal = (word: string, guesses: string[]) => {
   return false
 }
 
+export const splitGuess = (guess: string, gridSize: number) => {
+  return Array.from(Array(gridSize)).map((_, i) =>
+    guess.substring(i * gridSize, (i + 1) * gridSize)
+  )
+}
+
+export const splitStatuses = (status: CharStatus[], gridSize: number) => {
+  return Array.from(Array(gridSize)).map((_, i) =>
+    status.slice(i * gridSize, (i + 1) * gridSize)
+  )
+}
+
 export const unicodeSplit = (word: string) => {
   return new GraphemeSplitter().splitGraphemes(word)
 }
@@ -72,19 +87,19 @@ export const localeAwareUpperCase = (text: string) => {
     : text.toUpperCase()
 }
 
-export const getWordOfDay = () => {
+export const getWordOfDay = (gridSize: number) => {
   // January 1, 2022 Game Epoch
   const epochMs = new Date('January 1, 2022 00:00:00').valueOf()
   const now = Date.now()
-  const msInDay = 86400000
+  const msInDay = 8640
   const index = Math.floor((now - epochMs) / msInDay)
   const nextday = (index + 1) * msInDay + epochMs
 
   return {
-    solution: localeAwareUpperCase(WORDS[index % WORDS.length]),
+    solution: generateFillomino(index, gridSize),
     solutionIndex: index,
     tomorrow: nextday,
   }
 }
 
-export const { solution, solutionIndex, tomorrow } = getWordOfDay()
+export const { solution, solutionIndex, tomorrow } = getWordOfDay(4)
