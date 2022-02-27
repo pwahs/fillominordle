@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/fillominordle/static/css/main.19cfdebd.css",
+    "main.js": "/fillominordle/static/js/main.41cc2a02.js",
+    "static/js/787.adcd0480.chunk.js": "/fillominordle/static/js/787.adcd0480.chunk.js",
+    "index.html": "/fillominordle/index.html",
+    "main.19cfdebd.css.map": "/fillominordle/static/css/main.19cfdebd.css.map",
+    "main.41cc2a02.js.map": "/fillominordle/static/js/main.41cc2a02.js.map",
+    "787.adcd0480.chunk.js.map": "/fillominordle/static/js/787.adcd0480.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.19cfdebd.css",
+    "static/js/main.41cc2a02.js"
+  ]
+}
