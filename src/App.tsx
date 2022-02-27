@@ -55,13 +55,17 @@ function App() {
     useAlert()
   const [currentGuesses, setCurrentGuesses] = useState<{
     [gridSize: number]: string
-  }>(Object.fromEntries(GRID_SIZES.map((grid_size) => [grid_size, ''])))
-  const [isGameWon, setIsGameWon] = useState(false)
+  }>(Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, ''])))
+  const [isGameWon, setIsGameWon] = useState<{ [gridSize: number]: boolean }>(
+    Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, false]))
+  )
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [currentRowClass, setCurrentRowClass] = useState('')
-  const [isGameLost, setIsGameLost] = useState(false)
+  const [isGameLost, setIsGameLost] = useState<{ [gridSize: number]: boolean }>(
+    Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, false]))
+  )
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('theme')
       ? localStorage.getItem('theme') === 'dark'
@@ -79,15 +83,20 @@ function App() {
         return Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, []]))
       }
       GRID_SIZES.map((gridSize) => {
-        // TODO: gameWasWon/Lost per-gridSize
         const gameWasWon = loaded.guesses[gridSize].includes(
           solutions[gridSize]
         )
         if (gameWasWon) {
-          setIsGameWon(true)
+          setIsGameWon({
+            ...isGameWon,
+            [gridSize]: true,
+          })
         }
         if (loaded.guesses[gridSize].length === MAX_CHALLENGES && !gameWasWon) {
-          setIsGameLost(true)
+          setIsGameLost({
+            ...isGameLost,
+            [gridSize]: true,
+          })
           showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
             persist: true,
           })
@@ -147,7 +156,7 @@ function App() {
   }, [guesses])
 
   useEffect(() => {
-    if (isGameWon) {
+    if (isGameWon[gridSize]) {
       const winMessage =
         WIN_MESSAGES[Math.floor(Math.random() * WIN_MESSAGES.length)]
       const delayMs = GAME_END_DELAY(gridSize)
@@ -158,19 +167,19 @@ function App() {
       })
     }
 
-    if (isGameLost) {
+    if (isGameLost[gridSize]) {
       setTimeout(() => {
         setIsStatsModalOpen(true)
       }, GAME_END_DELAY(gridSize))
     }
-  }, [gridSize, isGameWon, isGameLost, showSuccessAlert])
+  }, [gridSize, isGameWon[gridSize], isGameLost[gridSize], showSuccessAlert])
 
   const onChar = (value: string) => {
     if (
       unicodeLength(`${currentGuesses[gridSize]}${value}`) <=
         gridSize * gridSize &&
       guesses[gridSize].length < MAX_CHALLENGES &&
-      !isGameWon
+      !isGameWon[gridSize]
     ) {
       setCurrentGuesses({
         ...currentGuesses,
@@ -190,7 +199,7 @@ function App() {
   }
 
   const onEnter = () => {
-    if (isGameWon || isGameLost) {
+    if (isGameWon[gridSize] || isGameLost[gridSize]) {
       return
     }
 
@@ -220,7 +229,7 @@ function App() {
     if (
       unicodeLength(currentGuesses[gridSize]) === gridSize * gridSize &&
       guesses[gridSize].length < MAX_CHALLENGES &&
-      !isGameWon
+      !isGameWon[gridSize]
     ) {
       setGuesses({
         ...guesses,
@@ -234,12 +243,19 @@ function App() {
       if (winningWord) {
         // TODO: setStats for gridSizes
         setStats(addStatsForCompletedGame(stats, guesses[gridSize].length))
-        return setIsGameWon(true)
+        setIsGameWon({
+          ...isGameWon,
+          [gridSize]: true,
+        })
+        return
       }
 
       if (guesses[gridSize].length === MAX_CHALLENGES - 1) {
         setStats(addStatsForCompletedGame(stats, guesses[gridSize].length + 1))
-        setIsGameLost(true)
+        setIsGameLost({
+          ...isGameLost,
+          [gridSize]: true,
+        })
         showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
           persist: true,
           delayMs: GAME_END_DELAY(gridSize),
@@ -298,8 +314,8 @@ function App() {
         handleClose={() => setIsStatsModalOpen(false)}
         guesses={guesses[gridSize]}
         gameStats={stats}
-        isGameLost={isGameLost}
-        isGameWon={isGameWon}
+        isGameLost={isGameLost[gridSize]}
+        isGameWon={isGameWon[gridSize]}
         handleShare={() => showSuccessAlert(GAME_COPIED_MESSAGE)}
         isDarkMode={isDarkMode}
         isHighContrastMode={isHighContrastMode}
