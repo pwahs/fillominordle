@@ -13,7 +13,7 @@ export const shareStatus = (
   navigator.clipboard.writeText(
     `${GAME_TITLE} ${solutionIndex} ${
       lost ? 'X' : guesses.length
-    }/${MAX_CHALLENGES}\n\n` +
+    }/${MAX_CHALLENGES(gridSize)}\n\n` +
       generateEmojiGrid(
         guesses,
         getEmojiTiles(isDarkMode, isHighContrastMode),

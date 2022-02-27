@@ -92,7 +92,10 @@ function App() {
             [gridSize]: true,
           })
         }
-        if (loaded.guesses[gridSize].length === MAX_CHALLENGES && !gameWasWon) {
+        if (
+          loaded.guesses[gridSize].length === MAX_CHALLENGES(gridSize) &&
+          !gameWasWon
+        ) {
           setIsGameLost({
             ...isGameLost,
             [gridSize]: true,
@@ -178,7 +181,7 @@ function App() {
     if (
       unicodeLength(`${currentGuesses[gridSize]}${value}`) <=
         gridSize * gridSize &&
-      guesses[gridSize].length < MAX_CHALLENGES &&
+      guesses[gridSize].length < MAX_CHALLENGES(gridSize) &&
       !isGameWon[gridSize]
     ) {
       setCurrentGuesses({
@@ -228,7 +231,7 @@ function App() {
 
     if (
       unicodeLength(currentGuesses[gridSize]) === gridSize * gridSize &&
-      guesses[gridSize].length < MAX_CHALLENGES &&
+      guesses[gridSize].length < MAX_CHALLENGES(gridSize) &&
       !isGameWon[gridSize]
     ) {
       setGuesses({
@@ -242,7 +245,9 @@ function App() {
 
       if (winningWord) {
         // TODO: setStats for gridSizes
-        setStats(addStatsForCompletedGame(stats, guesses[gridSize].length))
+        setStats(
+          addStatsForCompletedGame(stats, guesses[gridSize].length, gridSize)
+        )
         setIsGameWon({
           ...isGameWon,
           [gridSize]: true,
@@ -250,8 +255,14 @@ function App() {
         return
       }
 
-      if (guesses[gridSize].length === MAX_CHALLENGES - 1) {
-        setStats(addStatsForCompletedGame(stats, guesses[gridSize].length + 1))
+      if (guesses[gridSize].length === MAX_CHALLENGES(gridSize) - 1) {
+        setStats(
+          addStatsForCompletedGame(
+            stats,
+            guesses[gridSize].length + 1,
+            gridSize
+          )
+        )
         setIsGameLost({
           ...isGameLost,
           [gridSize]: true,

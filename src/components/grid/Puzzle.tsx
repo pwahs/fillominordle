@@ -17,10 +17,6 @@ export const Puzzle = ({
   currentRowClassName,
   gridSize,
 }: Props) => {
-  // const empties =
-  //   guesses.length < MAX_CHALLENGES - 1
-  //     ? Array.from(Array(MAX_CHALLENGES - 1 - guesses.length))
-  //     : []
 
   return (
     <div className="flex wrap pb-6">
@@ -32,7 +28,7 @@ export const Puzzle = ({
           isRevealing={isRevealing && guesses.length - 1 === i}
         />
       ))}
-      {guesses.length < MAX_CHALLENGES && (
+      {guesses.length < MAX_CHALLENGES(gridSize) && (
         <CurrentGrid
           gridSize={gridSize}
           guess={currentGuess}
@@ -42,7 +38,3 @@ export const Puzzle = ({
     </div>
   )
 }
-
-//{empties.map((_, i) => (
-//<EmptyGrid gridSize={gridSize} key={i} />
-//))}

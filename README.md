@@ -1,7 +1,8 @@
 # Fillominordle
 
-This is a clone project of the popular word guessing game we all know and love. Made using React, Typescript, and Tailwind. Forked from [Reactle](https://github.com/cwackerfuss/react-wordle), many thanks to the original author!
-Guess the Fillomino-solution! 
+Guess the Fillomino solution!
+
+This is a clone project of the popular word guessing game we all know and love. Made using React, Typescript, and Tailwind. Forked from [Reactle](https://github.com/cwackerfuss/react-wordle), many thanks to the original author cwackerfuss!
 
 ## Build and run
 

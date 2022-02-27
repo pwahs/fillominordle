@@ -1,5 +1,5 @@
 export const GRID_SIZES = [3, 4, 5]
-export const MAX_CHALLENGES = 8
+export const MAX_CHALLENGES = (gridSize: number): number => gridSize + 2
 export const ALERT_TIME_MS = 2000
 export const REVEAL_TIME_MS = 350
 export const GAME_END_DELAY = (gridSize: number): number =>
