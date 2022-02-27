@@ -14,7 +14,7 @@ export const RadioButtons = ({
   handleValue,
 }: Props) => {
   return (
-    <form className="flex justify-center">
+    <form className="flex justify-center mb-5">
       <div className="mr-3">{text}</div>
       {labels.map((label) => (
         <RadioButton
@@ -43,7 +43,7 @@ const RadioButton = ({
   checked,
 }: RadioButtonProps) => {
   return (
-    <div className="flex mr-3">
+    <div className="flex items-center mr-3">
       <input
         type="radio"
         onChange={() => handleValue(label)}
@@ -52,7 +52,7 @@ const RadioButton = ({
         className="mr-1"
         checked={checked}
       />
-      <div>{label}</div>
+      <label>{label}</label>
     </div>
   )
 }
