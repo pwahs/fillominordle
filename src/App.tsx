@@ -10,6 +10,7 @@ import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
 import { SettingsModal } from './components/modals/SettingsModal'
 import {
+  CHOOSE_GRID_SIZE,
   CORRECT_WORD_MESSAGE,
   GAME_COPIED_MESSAGE,
   GAME_TITLE,
@@ -20,6 +21,7 @@ import {
 } from './constants/strings'
 import {
   GAME_END_DELAY,
+  GRID_SIZES,
   MAX_CHALLENGES,
   WELCOME_INFO_MODAL_MS,
 } from './constants/settings'
@@ -44,6 +46,7 @@ import { default as GraphemeSplitter } from 'grapheme-splitter'
 import './App.css'
 import { AlertContainer } from './components/alerts/AlertContainer'
 import { useAlert } from './context/AlertContext'
+import { RadioButtons } from './components/RadioButtons'
 
 function App() {
   const prefersDarkMode = window.matchMedia(
@@ -138,8 +141,7 @@ function App() {
     setStoredIsHighContrastMode(isHighContrast)
   }
 
-  const handleGridSize = (isSmall: boolean) => {
-    const gridSize = isSmall ? 3 : 4
+  const handleGridSize = (gridSize: number) => {
     setGridSize(gridSize)
     setStoredGridSize(gridSize)
   }
@@ -273,6 +275,13 @@ function App() {
           onClick={() => setIsSettingsModalOpen(true)}
         />
       </div>
+      <RadioButtons
+        text={CHOOSE_GRID_SIZE}
+        setting={'gridSize'}
+        labels={GRID_SIZES}
+        value={gridSize}
+        handleValue={handleGridSize}
+      />
       <Puzzle
         guesses={guesses}
         currentGuess={currentGuess}
@@ -314,8 +323,6 @@ function App() {
         handleDarkMode={handleDarkMode}
         isHighContrastMode={isHighContrastMode}
         handleHighContrastMode={handleHighContrastMode}
-        gridSize={gridSize}
-        handleGridSize={handleGridSize}
       />
 
       <AlertContainer />
