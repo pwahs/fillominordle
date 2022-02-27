@@ -5,7 +5,7 @@ import { verifyFillomino } from '../fillo/verifyFillo'
 import { generateFillomino } from '../fillo/generateFillo'
 import { GRID_SIZES } from '../constants/settings'
 
-export const isWordInWordList = (gridSize: number, word: string) => {
+export const isGuessValid = (gridSize: number, word: string) => {
   return verifyFillomino(gridSize, word)
   //WORDS.includes(localeAwareLowerCase(word)) ||
   //VALID_GUESSES.includes(localeAwareLowerCase(word))

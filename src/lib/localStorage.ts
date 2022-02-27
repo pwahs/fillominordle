@@ -3,7 +3,7 @@ const highContrastKey = 'highContrast'
 const gridSizeKey = 'gridSize'
 
 type StoredGameState = {
-  guesses: string[]
+  guesses: { [gridSize: number]: string[] }
   solutions: { [gridSize: number]: string }
 }
 

@@ -30,6 +30,7 @@ export const Keyboard = ({
       onEnter()
     } else if (value === 'DELETE') {
       onDelete()
+      console.log('DELETE')
     } else {
       onChar(value)
     }
@@ -41,6 +42,7 @@ export const Keyboard = ({
         onEnter()
       } else if (e.code === 'Backspace') {
         onDelete()
+        console.log('Backspace')
       } else {
         const key = localeAwareUpperCase(e.key)
         // TODO: check this test if the range works with non-english letters

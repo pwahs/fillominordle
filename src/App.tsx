@@ -3,22 +3,17 @@ import {
   CogIcon,
   InformationCircleIcon,
 } from '@heroicons/react/outline'
+import { default as GraphemeSplitter } from 'grapheme-splitter'
+import { cloneDeep } from 'lodash'
 import { useEffect, useState } from 'react'
+import './App.css'
+import { AlertContainer } from './components/alerts/AlertContainer'
 import { Puzzle } from './components/grid/Puzzle'
 import { Keyboard } from './components/keyboard/Keyboard'
 import { InfoModal } from './components/modals/InfoModal'
-import { StatsModal } from './components/modals/StatsModal'
 import { SettingsModal } from './components/modals/SettingsModal'
-import {
-  CHOOSE_GRID_SIZE,
-  CORRECT_WORD_MESSAGE,
-  GAME_COPIED_MESSAGE,
-  GAME_TITLE,
-  HARD_MODE_ALERT_MESSAGE,
-  NOT_ENOUGH_LETTERS_MESSAGE,
-  WIN_MESSAGES,
-  WORD_NOT_FOUND_MESSAGE,
-} from './constants/strings'
+import { StatsModal } from './components/modals/StatsModal'
+import { RadioButtons } from './components/RadioButtons'
 import {
   GAME_END_DELAY,
   GRID_SIZES,
@@ -26,13 +21,15 @@ import {
   WELCOME_INFO_MODAL_MS,
 } from './constants/settings'
 import {
-  findFirstUnusedReveal,
-  isWinningWord,
-  isWordInWordList,
-  solutions,
-  unicodeLength,
-} from './lib/words'
-import { addStatsForCompletedGame, loadStats } from './lib/stats'
+  CHOOSE_GRID_SIZE,
+  CORRECT_WORD_MESSAGE,
+  GAME_COPIED_MESSAGE,
+  GAME_TITLE,
+  NOT_ENOUGH_LETTERS_MESSAGE,
+  WIN_MESSAGES,
+  WORD_NOT_FOUND_MESSAGE as GUESS_INVALID_MESSAGE,
+} from './constants/strings'
+import { useAlert } from './context/AlertContext'
 import {
   getStoredGridSize,
   getStoredIsHighContrastMode,
@@ -41,12 +38,13 @@ import {
   setStoredGridSize,
   setStoredIsHighContrastMode,
 } from './lib/localStorage'
-import { default as GraphemeSplitter } from 'grapheme-splitter'
-
-import './App.css'
-import { AlertContainer } from './components/alerts/AlertContainer'
-import { useAlert } from './context/AlertContext'
-import { RadioButtons } from './components/RadioButtons'
+import { addStatsForCompletedGame, loadStats } from './lib/stats'
+import {
+  isGuessValid,
+  isWinningWord,
+  solutions,
+  unicodeLength,
+} from './lib/words'
 
 function App() {
   const prefersDarkMode = window.matchMedia(
@@ -55,7 +53,9 @@ function App() {
 
   const { showError: showErrorAlert, showSuccess: showSuccessAlert } =
     useAlert()
-  const [currentGuess, setCurrentGuess] = useState('')
+  const [currentGuesses, setCurrentGuesses] = useState<{
+    [gridSize: number]: string
+  }>(Object.fromEntries(GRID_SIZES.map((grid_size) => [grid_size, ''])))
   const [isGameWon, setIsGameWon] = useState(false)
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
@@ -72,31 +72,32 @@ function App() {
   )
   const [gridSize, setGridSize] = useState(getStoredGridSize())
   const [isRevealing, setIsRevealing] = useState(false)
-  const [guesses, setGuesses] = useState<string[]>(() => {
-    const loaded = loadGameStateFromLocalStorage()
-    if (loaded?.solutions !== solutions) {
-      return []
-    }
-    const gameWasWon = loaded.guesses.includes(solutions[gridSize])
-    if (gameWasWon) {
-      setIsGameWon(true)
-    }
-    if (loaded.guesses.length === MAX_CHALLENGES && !gameWasWon) {
-      setIsGameLost(true)
-      showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
-        persist: true,
+  const [guesses, setGuesses] = useState<{ [gridSize: number]: string[] }>(
+    () => {
+      const loaded = loadGameStateFromLocalStorage()
+      if (loaded?.solutions !== solutions) {
+        return Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, []]))
+      }
+      GRID_SIZES.map((gridSize) => {
+        // TODO: gameWasWon/Lost per-gridSize
+        const gameWasWon = loaded.guesses[gridSize].includes(
+          solutions[gridSize]
+        )
+        if (gameWasWon) {
+          setIsGameWon(true)
+        }
+        if (loaded.guesses[gridSize].length === MAX_CHALLENGES && !gameWasWon) {
+          setIsGameLost(true)
+          showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
+            persist: true,
+          })
+        }
       })
+      return loaded.guesses
     }
-    return loaded.guesses
-  })
+  )
 
   const [stats, setStats] = useState(() => loadStats())
-
-  const [isHardMode, setIsHardMode] = useState(
-    localStorage.getItem('gameMode')
-      ? localStorage.getItem('gameMode') === 'hard'
-      : false
-  )
 
   useEffect(() => {
     // if no game state on load,
@@ -125,15 +126,6 @@ function App() {
   const handleDarkMode = (isDark: boolean) => {
     setIsDarkMode(isDark)
     localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  }
-
-  const handleHardMode = (isHard: boolean) => {
-    if (guesses.length === 0 || localStorage.getItem('gameMode') === 'hard') {
-      setIsHardMode(isHard)
-      localStorage.setItem('gameMode', isHard ? 'hard' : 'normal')
-    } else {
-      showErrorAlert(HARD_MODE_ALERT_MESSAGE)
-    }
   }
 
   const handleHighContrastMode = (isHighContrast: boolean) => {
@@ -175,18 +167,26 @@ function App() {
 
   const onChar = (value: string) => {
     if (
-      unicodeLength(`${currentGuess}${value}`) <= gridSize * gridSize &&
-      guesses.length < MAX_CHALLENGES &&
+      unicodeLength(`${currentGuesses[gridSize]}${value}`) <=
+        gridSize * gridSize &&
+      guesses[gridSize].length < MAX_CHALLENGES &&
       !isGameWon
     ) {
-      setCurrentGuess(`${currentGuess}${value}`)
+      setCurrentGuesses({
+        ...currentGuesses,
+        [gridSize]: `${currentGuesses[gridSize]}${value}`,
+      })
     }
   }
 
   const onDelete = () => {
-    setCurrentGuess(
-      new GraphemeSplitter().splitGraphemes(currentGuess).slice(0, -1).join('')
-    )
+    setCurrentGuesses({
+      ...currentGuesses,
+      [gridSize]: new GraphemeSplitter()
+        .splitGraphemes(currentGuesses[gridSize])
+        .slice(0, -1)
+        .join(''),
+    })
   }
 
   const onEnter = () => {
@@ -194,33 +194,18 @@ function App() {
       return
     }
 
-    if (!(unicodeLength(currentGuess) === gridSize * gridSize)) {
+    if (!(unicodeLength(currentGuesses[gridSize]) === gridSize * gridSize)) {
       setCurrentRowClass('jiggle')
       return showErrorAlert(NOT_ENOUGH_LETTERS_MESSAGE, {
         onClose: clearCurrentRowClass,
       })
     }
 
-    if (!isWordInWordList(gridSize, currentGuess)) {
+    if (!isGuessValid(gridSize, currentGuesses[gridSize])) {
       setCurrentRowClass('jiggle')
-      return showErrorAlert(WORD_NOT_FOUND_MESSAGE, {
+      return showErrorAlert(GUESS_INVALID_MESSAGE, {
         onClose: clearCurrentRowClass,
       })
-    }
-
-    // enforce hard mode - all guesses must contain all previously revealed letters
-    if (isHardMode) {
-      const firstMissingReveal = findFirstUnusedReveal(
-        currentGuess,
-        guesses,
-        gridSize
-      )
-      if (firstMissingReveal) {
-        setCurrentRowClass('jiggle')
-        return showErrorAlert(firstMissingReveal, {
-          onClose: clearCurrentRowClass,
-        })
-      }
     }
 
     setIsRevealing(true)
@@ -230,23 +215,30 @@ function App() {
       setIsRevealing(false)
     }, GAME_END_DELAY(gridSize))
 
-    const winningWord = isWinningWord(currentGuess, gridSize)
+    const winningWord = isWinningWord(currentGuesses[gridSize], gridSize)
 
     if (
-      unicodeLength(currentGuess) === gridSize * gridSize &&
-      guesses.length < MAX_CHALLENGES &&
+      unicodeLength(currentGuesses[gridSize]) === gridSize * gridSize &&
+      guesses[gridSize].length < MAX_CHALLENGES &&
       !isGameWon
     ) {
-      setGuesses([...guesses, currentGuess])
-      setCurrentGuess('')
+      setGuesses({
+        ...guesses,
+        [gridSize]: [...guesses[gridSize], currentGuesses[gridSize]],
+      })
+      setCurrentGuesses({
+        ...currentGuesses,
+        [gridSize]: '',
+      })
 
       if (winningWord) {
-        setStats(addStatsForCompletedGame(stats, guesses.length))
+        // TODO: setStats for gridSizes
+        setStats(addStatsForCompletedGame(stats, guesses[gridSize].length))
         return setIsGameWon(true)
       }
 
-      if (guesses.length === MAX_CHALLENGES - 1) {
-        setStats(addStatsForCompletedGame(stats, guesses.length + 1))
+      if (guesses[gridSize].length === MAX_CHALLENGES - 1) {
+        setStats(addStatsForCompletedGame(stats, guesses[gridSize].length + 1))
         setIsGameLost(true)
         showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
           persist: true,
@@ -283,8 +275,8 @@ function App() {
         handleValue={handleGridSize}
       />
       <Puzzle
-        guesses={guesses}
-        currentGuess={currentGuess}
+        guesses={guesses[gridSize]}
+        currentGuess={currentGuesses[gridSize]}
         isRevealing={isRevealing}
         currentRowClassName={currentRowClass}
         gridSize={gridSize}
@@ -293,7 +285,7 @@ function App() {
         onChar={onChar}
         onDelete={onDelete}
         onEnter={onEnter}
-        guesses={guesses}
+        guesses={guesses[gridSize]}
         isRevealing={isRevealing}
         gridSize={gridSize}
       />
@@ -304,12 +296,11 @@ function App() {
       <StatsModal
         isOpen={isStatsModalOpen}
         handleClose={() => setIsStatsModalOpen(false)}
-        guesses={guesses}
+        guesses={guesses[gridSize]}
         gameStats={stats}
         isGameLost={isGameLost}
         isGameWon={isGameWon}
         handleShare={() => showSuccessAlert(GAME_COPIED_MESSAGE)}
-        isHardMode={isHardMode}
         isDarkMode={isDarkMode}
         isHighContrastMode={isHighContrastMode}
         gridSize={gridSize}
@@ -317,8 +308,6 @@ function App() {
       <SettingsModal
         isOpen={isSettingsModalOpen}
         handleClose={() => setIsSettingsModalOpen(false)}
-        isHardMode={isHardMode}
-        handleHardMode={handleHardMode}
         isDarkMode={isDarkMode}
         handleDarkMode={handleDarkMode}
         isHighContrastMode={isHighContrastMode}
