@@ -44,6 +44,6 @@ export const Puzzle = ({
   )
 }
 
-      //{empties.map((_, i) => (
-        //<EmptyGrid gridSize={gridSize} key={i} />
-      //))}
+//{empties.map((_, i) => (
+//<EmptyGrid gridSize={gridSize} key={i} />
+//))}

@@ -68,7 +68,12 @@ export const Keyboard = ({
         ))}
       </div>
       <div className="flex justify-center mb-1">
-        <Key width={65.4} value="ENTER" onClick={onClick} keyDelayMs={keyDelayMs}>
+        <Key
+          width={65.4}
+          value="ENTER"
+          onClick={onClick}
+          keyDelayMs={keyDelayMs}
+        >
           {ENTER_TEXT}
         </Key>
         {['4', '5', '6'].map((key) => (
@@ -81,7 +86,12 @@ export const Keyboard = ({
             keyDelayMs={keyDelayMs}
           />
         ))}
-        <Key width={65.4} value="DELETE" onClick={onClick} keyDelayMs={keyDelayMs}>
+        <Key
+          width={65.4}
+          value="DELETE"
+          onClick={onClick}
+          keyDelayMs={keyDelayMs}
+        >
           {DELETE_TEXT}
         </Key>
       </div>

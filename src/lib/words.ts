@@ -1,17 +1,13 @@
-import { WORDS } from '../constants/wordlist'
-import { WRONG_SPOT_MESSAGE, NOT_CONTAINED_MESSAGE } from '../constants/strings'
+import { NOT_CONTAINED_MESSAGE, WRONG_SPOT_MESSAGE } from '../constants/strings'
 import { CharStatus, getGuessStatuses } from './statuses'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 import { verifyFillomino } from '../fillo/verifyFillo'
 import { generateFillomino } from '../fillo/generateFillo'
 
 export const isWordInWordList = (gridSize: number, word: string) => {
-  return (
-    verifyFillomino(gridSize, word)
-    //WORDS.includes(localeAwareLowerCase(word)) ||
-    //VALID_GUESSES.includes(localeAwareLowerCase(word))
-
-  )
+  return verifyFillomino(gridSize, word)
+  //WORDS.includes(localeAwareLowerCase(word)) ||
+  //VALID_GUESSES.includes(localeAwareLowerCase(word))
 }
 
 export const isWinningWord = (word: string) => {

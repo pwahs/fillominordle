@@ -10,7 +10,7 @@ Guess the Fillomino-solution!
 Clone the repository and perform the following command line actions:
 
 ```bash
-$> cd react-wordle
+$> cd fillominordle
 $> npm install
 $> npm run start
 ```
