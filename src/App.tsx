@@ -4,7 +4,6 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/outline'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
-import { cloneDeep } from 'lodash'
 import { useEffect, useState } from 'react'
 import './App.css'
 import { AlertContainer } from './components/alerts/AlertContainer'
@@ -104,6 +103,7 @@ function App() {
             persist: true,
           })
         }
+        return null
       })
       return loaded.guesses
     }
@@ -175,7 +175,7 @@ function App() {
         setIsStatsModalOpen(true)
       }, GAME_END_DELAY(gridSize))
     }
-  }, [gridSize, isGameWon[gridSize], isGameLost[gridSize], showSuccessAlert])
+  }, [gridSize, isGameWon, isGameLost, showSuccessAlert])
 
   const onChar = (value: string) => {
     if (
