@@ -6,7 +6,13 @@ type Props = {
   handleValue: (value: number) => void
 }
 
-export const RadioButtons = ({ text, setting, labels, handleValue }: Props) => {
+export const RadioButtons = ({
+  text,
+  setting,
+  labels,
+  value,
+  handleValue,
+}: Props) => {
   return (
     <form className="flex justify-center">
       <div className="mr-3">{text}</div>
@@ -16,6 +22,7 @@ export const RadioButtons = ({ text, setting, labels, handleValue }: Props) => {
           label={label}
           handleValue={handleValue}
           key={label}
+          checked={label === value}
         />
       ))}
     </form>
@@ -26,9 +33,15 @@ type RadioButtonProps = {
   name: string
   label: number
   handleValue: (value: number) => void
+  checked: boolean
 }
 
-const RadioButton = ({ name, label, handleValue }: RadioButtonProps) => {
+const RadioButton = ({
+  name,
+  label,
+  handleValue,
+  checked,
+}: RadioButtonProps) => {
   return (
     <div className="flex mr-3">
       <input
@@ -37,6 +50,7 @@ const RadioButton = ({ name, label, handleValue }: RadioButtonProps) => {
         name={name}
         value={label}
         className="mr-1"
+        checked={checked}
       />
       <div>{label}</div>
     </div>
