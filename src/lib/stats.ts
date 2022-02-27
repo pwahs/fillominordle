@@ -37,9 +37,16 @@ export const addStatsForCompletedGame = (
 }
 
 const defaultStats: GameStats = {
-  winDistribution: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, Array.from(new Array(MAX_CHALLENGES(gridSize)), () => 0)])),
+  winDistribution: Object.fromEntries(
+    GRID_SIZES.map((gridSize) => [
+      gridSize,
+      Array.from(new Array(MAX_CHALLENGES(gridSize)), () => 0),
+    ])
+  ),
   gamesFailed: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
-  currentStreak: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
+  currentStreak: Object.fromEntries(
+    GRID_SIZES.map((gridSize) => [gridSize, 0])
+  ),
   bestStreak: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
   totalGames: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
   successRate: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
@@ -53,6 +60,7 @@ const getSuccessRate = (gameStats: GameStats, gridSize: number) => {
   const { totalGames, gamesFailed } = gameStats
 
   return Math.round(
-    (100 * (totalGames[gridSize] - gamesFailed[gridSize])) / Math.max(totalGames[gridSize], 1)
+    (100 * (totalGames[gridSize] - gamesFailed[gridSize])) /
+      Math.max(totalGames[gridSize], 1)
   )
 }

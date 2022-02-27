@@ -2,7 +2,7 @@ import { GameStats } from '../../lib/localStorage'
 import { Progress } from './Progress'
 
 type Props = {
-  gameStats: GameStats,
+  gameStats: GameStats
   gridSize: number
 }
 

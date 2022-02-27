@@ -17,7 +17,6 @@ export const Puzzle = ({
   currentRowClassName,
   gridSize,
 }: Props) => {
-
   return (
     <div className="flex wrap pb-6">
       {guesses.map((guess, i) => (
