@@ -12,7 +12,7 @@ export const NOT_CONTAINED_MESSAGE = (digit: string) =>
   `Guess must contain ${digit}`
 export const ENTER_TEXT = 'Enter'
 export const DELETE_TEXT = 'Delete'
-export const STATISTICS_TITLE = 'Statistics'
+export const STATISTICS_TITLE = (gridSize: number) => `Statistics for size ${gridSize}`
 export const GUESS_DISTRIBUTION_TEXT = 'Guess Distribution'
 export const NEW_WORD_TEXT = 'New fillomino in'
 export const SHARE_TEXT = 'Share'

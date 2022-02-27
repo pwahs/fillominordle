@@ -9,52 +9,84 @@ type Props = {
 export const InfoModal = ({ isOpen, handleClose }: Props) => {
   return (
     <BaseModal title="How to play" isOpen={isOpen} handleClose={handleClose}>
-      <p className="text-sm text-gray-500 dark:text-gray-300">
-        Guess the word in 6 tries. After each guess, the color of the tiles will
-        change to show how close your guess was to the word.
+      <p className="text-sm text-gray-500 dark:text-gray-300 mb-3">
+        Guess the fillomino of size 3x3, 4x4 or 5x5 in 5, 6 or 7 tries, respectively. After each guess, the color of the tiles will
+        change to show how close your guess was to the fillomino.
       </p>
 
-      <div className="flex justify-center mb-1 mt-4">
-        <Cell
-          isRevealing={true}
-          isCompleted={true}
-          value="W"
-          status="correct"
-        />
-        <Cell value="E" />
-        <Cell value="A" />
-        <Cell value="R" />
-        <Cell value="Y" />
-      </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter W is in the word and in the correct spot.
+        A valid fillomino has a number in each cell, and each group of connected cells with the same number is exactly as large as the number says.
+        This game only has fillominos with numbers from 1 to 9.
       </p>
 
-      <div className="flex justify-center mb-1 mt-4">
-        <Cell value="P" />
-        <Cell value="I" />
-        <Cell
-          isRevealing={true}
-          isCompleted={true}
-          value="L"
-          status="present"
-        />
-        <Cell value="O" />
-        <Cell value="T" />
+      <div className="flex justify-center mb-1 mt-4 column">
+        <div className="flex justify-center mb-1">
+          <Cell
+            isRevealing={true}
+            isCompleted={true}
+            value="3"
+            status="correct"
+          />
+          <Cell value="3" />
+          <Cell value="1" />
+          <Cell value="3" />
+        </div>
+        <div className="flex justify-center">
+          <Cell value="3"
+          />
+          <Cell value="1" />
+          <Cell value="3" />
+          <Cell value="3" />
+        </div>
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter L is in the word but in the wrong spot.
+        The number 3 is in the fillomino and in the correct spot.
       </p>
-
-      <div className="flex justify-center mb-1 mt-4">
-        <Cell value="V" />
-        <Cell value="A" />
-        <Cell value="G" />
-        <Cell isRevealing={true} isCompleted={true} value="U" status="absent" />
-        <Cell value="E" />
+      <div className="flex justify-center mb-1 mt-4 column">
+        <div className="flex justify-center mb-1">
+          <Cell
+            value="2"
+          />
+          <Cell 
+            isRevealing={true}
+            isCompleted={true}
+            value="1" 
+            status="present"/>
+          <Cell value="4" />
+          <Cell value="4" />
+        </div>
+        <div className="flex justify-center">
+          <Cell value="2" />
+          <Cell value="4" />
+          <Cell value="4" />
+          <Cell value="1" />
+        </div>
       </div>
+
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter U is not in the word in any spot.
+        The number 1 is in the word but in the wrong spot.
+      </p>
+      <div className="flex justify-center mb-1 mt-4 column">
+        <div className="flex justify-center mb-1">
+          <Cell value="2" />
+          <Cell value="2" />
+          <Cell value="6" />
+          <Cell value="6" />
+        </div>
+        <div className="flex justify-center">
+          <Cell value="6" />
+          <Cell value="6" />
+          <Cell value="6" />
+          <Cell 
+            isRevealing={true}
+            isCompleted={true}
+            value="6" 
+            status="absent"/>
+        </div>
+      </div>
+
+      <p className="text-sm text-gray-500 dark:text-gray-300">
+        The number 6 is not in the fillomino in any spot.
       </p>
 
       <p className="mt-6 italic text-sm text-gray-500 dark:text-gray-300">

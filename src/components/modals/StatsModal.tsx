@@ -37,24 +37,24 @@ export const StatsModal = ({
   isHighContrastMode,
   gridSize,
 }: Props) => {
-  if (gameStats.totalGames <= 0) {
+  if (gameStats.totalGames[gridSize] <= 0) {
     return (
       <BaseModal
-        title={STATISTICS_TITLE}
+        title={STATISTICS_TITLE(gridSize)}
         isOpen={isOpen}
         handleClose={handleClose}
       >
-        <StatBar gameStats={gameStats} />
+        <StatBar gameStats={gameStats} gridSize={gridSize} />
       </BaseModal>
     )
   }
   return (
     <BaseModal
-      title={STATISTICS_TITLE}
+      title={STATISTICS_TITLE(gridSize)}
       isOpen={isOpen}
       handleClose={handleClose}
     >
-      <StatBar gameStats={gameStats} />
+      <StatBar gameStats={gameStats} gridSize={gridSize} />
       <h4 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
         {GUESS_DISTRIBUTION_TEXT}
       </h4>

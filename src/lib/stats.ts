@@ -15,22 +15,22 @@ export const addStatsForCompletedGame = (
   // Count is number of incorrect guesses before end.
   const stats = { ...gameStats }
 
-  stats.totalGames += 1
+  stats.totalGames[gridSize] += 1
 
   if (count >= MAX_CHALLENGES(gridSize)) {
     // A fail situation
-    stats.currentStreak = 0
-    stats.gamesFailed += 1
+    stats.currentStreak[gridSize] = 0
+    stats.gamesFailed[gridSize] += 1
   } else {
     stats.winDistribution[gridSize][count] += 1
-    stats.currentStreak += 1
+    stats.currentStreak[gridSize] += 1
 
-    if (stats.bestStreak < stats.currentStreak) {
-      stats.bestStreak = stats.currentStreak
+    if (stats.bestStreak[gridSize] < stats.currentStreak[gridSize]) {
+      stats.bestStreak[gridSize] = stats.currentStreak[gridSize]
     }
   }
 
-  stats.successRate = getSuccessRate(stats)
+  stats.successRate[gridSize] = getSuccessRate(stats, gridSize)
 
   saveStatsToLocalStorage(stats)
   return stats
@@ -38,21 +38,21 @@ export const addStatsForCompletedGame = (
 
 const defaultStats: GameStats = {
   winDistribution: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, Array.from(new Array(MAX_CHALLENGES(gridSize)), () => 0)])),
-  gamesFailed: 0,
-  currentStreak: 0,
-  bestStreak: 0,
-  totalGames: 0,
-  successRate: 0,
+  gamesFailed: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
+  currentStreak: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
+  bestStreak: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
+  totalGames: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
+  successRate: Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, 0])),
 }
 
 export const loadStats = () => {
   return loadStatsFromLocalStorage() || defaultStats
 }
 
-const getSuccessRate = (gameStats: GameStats) => {
+const getSuccessRate = (gameStats: GameStats, gridSize: number) => {
   const { totalGames, gamesFailed } = gameStats
 
   return Math.round(
-    (100 * (totalGames - gamesFailed)) / Math.max(totalGames, 1)
+    (100 * (totalGames[gridSize] - gamesFailed[gridSize])) / Math.max(totalGames[gridSize], 1)
   )
 }

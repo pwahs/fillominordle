@@ -22,11 +22,11 @@ export type GameStats = {
   winDistribution: {
     [gridSize: number]: number[]
   }
-  gamesFailed: number
-  currentStreak: number
-  bestStreak: number
-  totalGames: number
-  successRate: number
+  gamesFailed: { [gridSize: number]: number }
+  currentStreak: { [gridSize: number]: number }
+  bestStreak: { [gridSize: number]: number }
+  totalGames: { [gridSize: number]: number }
+  successRate: { [gridSize: number]: number }
 }
 
 export const saveStatsToLocalStorage = (gameStats: GameStats) => {

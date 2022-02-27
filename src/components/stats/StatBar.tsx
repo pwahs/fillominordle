@@ -8,6 +8,7 @@ import {
 
 type Props = {
   gameStats: GameStats
+  gridSize: number
 }
 
 const StatItem = ({
@@ -25,13 +26,13 @@ const StatItem = ({
   )
 }
 
-export const StatBar = ({ gameStats }: Props) => {
+export const StatBar = ({ gameStats, gridSize }: Props) => {
   return (
     <div className="flex justify-center my-2">
-      <StatItem label={TOTAL_TRIES_TEXT} value={gameStats.totalGames} />
-      <StatItem label={SUCCESS_RATE_TEXT} value={`${gameStats.successRate}%`} />
-      <StatItem label={CURRENT_STREAK_TEXT} value={gameStats.currentStreak} />
-      <StatItem label={BEST_STREAK_TEXT} value={gameStats.bestStreak} />
+      <StatItem label={TOTAL_TRIES_TEXT} value={gameStats.totalGames[gridSize]} />
+      <StatItem label={SUCCESS_RATE_TEXT} value={`${gameStats.successRate[gridSize]}%`} />
+      <StatItem label={CURRENT_STREAK_TEXT} value={gameStats.currentStreak[gridSize]} />
+      <StatItem label={BEST_STREAK_TEXT} value={gameStats.bestStreak[gridSize]} />
     </div>
   )
 }
