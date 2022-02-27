@@ -64,8 +64,6 @@ function App() {
     localStorage.getItem('theme')
       ? localStorage.getItem('theme') === 'dark'
       : prefersDarkMode
-      ? true
-      : false
   )
   const [isHighContrastMode, setIsHighContrastMode] = useState(
     getStoredIsHighContrastMode()
@@ -172,7 +170,7 @@ function App() {
         setIsStatsModalOpen(true)
       }, GAME_END_DELAY(gridSize))
     }
-  }, [isGameWon, isGameLost, showSuccessAlert])
+  }, [gridSize, isGameWon, isGameLost, showSuccessAlert])
 
   const onChar = (value: string) => {
     if (

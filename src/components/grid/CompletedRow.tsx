@@ -1,4 +1,4 @@
-import { CharStatus, getGuessStatuses } from '../../lib/statuses'
+import { CharStatus } from '../../lib/statuses'
 import { Cell } from './Cell'
 import { unicodeSplit } from '../../lib/words'
 

@@ -1,7 +1,6 @@
 import { MAX_CHALLENGES } from '../../constants/settings'
 import { CompletedGrid } from './CompletedGrid'
 import { CurrentGrid } from './CurrentGrid'
-import { EmptyGrid } from './EmptyGrid'
 
 type Props = {
   guesses: string[]
@@ -18,10 +17,10 @@ export const Puzzle = ({
   currentRowClassName,
   gridSize,
 }: Props) => {
-  const empties =
-    guesses.length < MAX_CHALLENGES - 1
-      ? Array.from(Array(MAX_CHALLENGES - 1 - guesses.length))
-      : []
+  // const empties =
+  //   guesses.length < MAX_CHALLENGES - 1
+  //     ? Array.from(Array(MAX_CHALLENGES - 1 - guesses.length))
+  //     : []
 
   return (
     <div className="flex wrap pb-6">

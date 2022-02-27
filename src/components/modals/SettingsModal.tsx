@@ -46,7 +46,7 @@ export const SettingsModal = ({
         />
         <SettingsToggle
           settingName="Size"
-          flag={gridSize == 3}
+          flag={gridSize === 3}
           handleFlag={handleGridSize}
         />
       </div>
