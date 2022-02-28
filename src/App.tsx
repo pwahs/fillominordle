@@ -79,6 +79,7 @@ function App() {
   const [guesses, setGuesses] = useState<{ [gridSize: number]: string[] }>(
     () => {
       const loaded = loadGameStateFromLocalStorage()
+      console.log(loaded)
       if (!loaded || !_.isEqual(loaded.solutions, solutions)) {
         return Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, []]))
       }
@@ -277,8 +278,8 @@ function App() {
   }
 
   return (
-    <div className="flex column h-screen pt-2 pb-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div className="flex w-80 mx-auto items-center mb-8 mt-20">
+    <div className="flex column h-screen pt-2 pb-2 max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div className="flex w-80 mx-auto items-center mb-3 mt-5">
         <h1 className="text-xl ml-2.5 grow font-bold dark:text-white">
           {GAME_TITLE}
         </h1>

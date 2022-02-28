@@ -13,7 +13,7 @@ export const CompletedGrid = ({ gridSize, guess, isRevealing }: Props) => {
   const rows = splitGuess(guess, gridSize)
 
   return (
-    <div className="flex justify-center mb-3 mr-3 column">
+    <div className="flex justify-center mb-3 mx-1.5 column">
       {rows.map((row, i) => (
         <CompletedRow
           key={i}

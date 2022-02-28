@@ -9,7 +9,7 @@ type Props = {
 
 export const CurrentGrid = ({ gridSize, guess, className }: Props) => {
   const rows = splitGuess(guess, gridSize)
-  const classes = `flex justify-center mb-3 mr-3 column ${className}`
+  const classes = `flex justify-center mb-3 mx-1.5 column ${className}`
 
   return (
     <div className={classes}>

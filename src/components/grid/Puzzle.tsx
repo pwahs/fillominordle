@@ -24,7 +24,7 @@ export const Puzzle = ({
       : []
 
   return (
-    <div className="flex flex-grow overflow-y-scroll justify-center wrap pb-6">
+    <div className="flex flex-grow overflow-y-scroll justify-center content-start wrap pb-6">
       {guesses.map((guess, i) => (
         <CompletedGrid
           key={i}

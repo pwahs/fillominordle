@@ -14,7 +14,7 @@ export const RadioButtons = ({
   handleValue,
 }: Props) => {
   return (
-    <form className="flex justify-center mb-5 dark:text-white">
+    <form className="flex justify-center mb-4 dark:text-white">
       <div className="mr-3">{text}</div>
       {labels.map((label) => (
         <RadioButton
