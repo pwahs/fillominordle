@@ -56,7 +56,7 @@ export const Keyboard = ({
   }, [onEnter, onDelete, onChar])
 
   return (
-    <div>
+    <div className="mt-3">
       <div className="flex justify-center mb-1">
         {['1', '2', '3'].map((key) => (
           <Key
