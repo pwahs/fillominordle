@@ -13,6 +13,7 @@ export const saveGameStateToLocalStorage = (gameState: StoredGameState) => {
 
 export const loadGameStateFromLocalStorage = () => {
   const state = localStorage.getItem(gameStateKey)
+  console.log(state)
   return state ? (JSON.parse(state) as StoredGameState) : null
 }
 

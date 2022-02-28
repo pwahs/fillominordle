@@ -44,6 +44,7 @@ import {
   solutions,
   unicodeLength,
 } from './lib/guesses'
+import _ from 'lodash'
 
 function App() {
   const prefersDarkMode = window.matchMedia(
@@ -78,7 +79,7 @@ function App() {
   const [guesses, setGuesses] = useState<{ [gridSize: number]: string[] }>(
     () => {
       const loaded = loadGameStateFromLocalStorage()
-      if (loaded?.solutions !== solutions) {
+      if (!loaded || !_.isEqual(loaded.solutions, solutions)) {
         return Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, []]))
       }
       GRID_SIZES.map((gridSize) => {
