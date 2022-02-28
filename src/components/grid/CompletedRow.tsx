@@ -1,6 +1,6 @@
 import { CharStatus } from '../../lib/statuses'
 import { Cell } from './Cell'
-import { unicodeSplit } from '../../lib/words'
+import { unicodeSplit } from '../../lib/guesses'
 
 type Props = {
   guess: string

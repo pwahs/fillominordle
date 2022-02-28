@@ -1,5 +1,5 @@
 import { getGuessStatuses } from './statuses'
-import { solutionIndex } from './words'
+import { solutionIndex } from './guesses'
 import { GAME_TITLE } from '../constants/strings'
 import { MAX_CHALLENGES, SHARED_GRIDS_PER_LINE } from '../constants/settings'
 

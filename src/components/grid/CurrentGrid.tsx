@@ -1,4 +1,4 @@
-import { splitGuess } from '../../lib/words'
+import { splitGuess } from '../../lib/guesses'
 import { CurrentRow } from './CurrentRow'
 
 type Props = {

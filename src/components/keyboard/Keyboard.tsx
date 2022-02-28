@@ -2,7 +2,7 @@ import { getStatuses } from '../../lib/statuses'
 import { Key } from './Key'
 import { useEffect } from 'react'
 import { ENTER_TEXT, DELETE_TEXT } from '../../constants/strings'
-import { localeAwareUpperCase } from '../../lib/words'
+import { localeAwareUpperCase } from '../../lib/guesses'
 import { KEY_DELAY_MS } from '../../constants/settings'
 
 type Props = {

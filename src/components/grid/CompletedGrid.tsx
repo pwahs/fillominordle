@@ -1,5 +1,5 @@
 import { getGuessStatuses } from '../../lib/statuses'
-import { splitGuess, splitStatuses } from '../../lib/words'
+import { splitGuess, splitStatuses } from '../../lib/guesses'
 import { CompletedRow } from './CompletedRow'
 
 type Props = {

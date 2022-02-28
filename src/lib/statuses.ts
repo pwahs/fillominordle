@@ -1,4 +1,4 @@
-import { solutions, unicodeSplit } from './words'
+import { solutions, unicodeSplit } from './guesses'
 
 export type CharStatus = 'absent' | 'present' | 'correct'
 

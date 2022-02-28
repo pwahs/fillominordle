@@ -56,5 +56,5 @@ export const setStoredGridSize = (gridSize: number) => {
 }
 
 export const getStoredGridSize = () => {
-  return parseInt(localStorage.getItem(gridSizeKey) ?? '4')
+  return parseInt(localStorage.getItem(gridSizeKey) ?? '3')
 }

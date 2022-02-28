@@ -43,7 +43,7 @@ import {
   isWinningWord,
   solutions,
   unicodeLength,
-} from './lib/words'
+} from './lib/guesses'
 
 function App() {
   const prefersDarkMode = window.matchMedia(
@@ -99,7 +99,7 @@ function App() {
             ...isGameLost,
             [gridSize]: true,
           })
-          showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
+          showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize], gridSize), {
             persist: true,
           })
         }
@@ -267,7 +267,7 @@ function App() {
           ...isGameLost,
           [gridSize]: true,
         })
-        showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize]), {
+        showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize], gridSize), {
           persist: true,
           delayMs: GAME_END_DELAY(gridSize),
         })

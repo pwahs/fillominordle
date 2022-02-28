@@ -7,8 +7,6 @@ import { GRID_SIZES } from '../constants/settings'
 
 export const isGuessValid = (gridSize: number, word: string) => {
   return verifyFillomino(gridSize, word)
-  //WORDS.includes(localeAwareLowerCase(word)) ||
-  //VALID_GUESSES.includes(localeAwareLowerCase(word))
 }
 
 export const isWinningWord = (word: string, gridSize: number) => {

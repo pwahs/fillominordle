@@ -7,4 +7,4 @@ export const GAME_END_DELAY = (gridSize: number): number =>
 export const KEY_DELAY_MS = (gridSize: number): number =>
   (2 * gridSize - 1) * REVEAL_TIME_MS
 export const WELCOME_INFO_MODAL_MS = 350
-export const SHARED_GRIDS_PER_LINE = 3
+export const SHARED_GRIDS_PER_LINE = 2
