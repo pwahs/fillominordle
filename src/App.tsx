@@ -158,9 +158,13 @@ function App() {
     setStoredIsDecreasedFontSize(isHighContrast)
   }
 
-  const handleGridSize = (gridSize: number) => {
-    setGridSize(gridSize)
-    setStoredGridSize(gridSize)
+  const handleGridSize = (newGridSize: number) => {
+    if (gridSize === newGridSize) {
+      return
+    }
+    setCursor(0)
+    setGridSize(newGridSize)
+    setStoredGridSize(newGridSize)
   }
 
   const clearCurrentRowClass = () => {
@@ -211,13 +215,20 @@ function App() {
   }
 
   const onDelete = () => {
+    if (cursor === 0) {
+      return
+    }
+    let toDelete = cursor - 1
+    let guess = currentGuesses[gridSize]
+    while (guess.length < toDelete) {
+      guess = `${guess}?`
+    }
+    guess = `${guess.substring(0, toDelete)}?${guess.substring(toDelete + 1)}`
     setCurrentGuesses({
       ...currentGuesses,
-      [gridSize]: new GraphemeSplitter()
-        .splitGraphemes(currentGuesses[gridSize])
-        .slice(0, -1)
-        .join(''),
+      [gridSize]: guess,
     })
+    setCursor(toDelete)
   }
 
   const onEnter = () => {
@@ -261,9 +272,9 @@ function App() {
         ...currentGuesses,
         [gridSize]: '',
       })
+      setCursor(0)
 
       if (winningWord) {
-        // TODO: setStats for gridSizes
         setStats(
           addStatsForCompletedGame(stats, guesses[gridSize].length, gridSize)
         )
