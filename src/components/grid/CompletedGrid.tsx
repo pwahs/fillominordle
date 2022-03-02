@@ -6,9 +6,15 @@ type Props = {
   gridSize: number
   guess: string
   isRevealing?: boolean
+  isDecreasedFontSize?: boolean
 }
 
-export const CompletedGrid = ({ gridSize, guess, isRevealing }: Props) => {
+export const CompletedGrid = ({
+  gridSize,
+  guess,
+  isRevealing,
+  isDecreasedFontSize,
+}: Props) => {
   const statuses = splitStatuses(getGuessStatuses(guess, gridSize), gridSize)
   const rows = splitGuess(guess, gridSize)
 
@@ -21,6 +27,7 @@ export const CompletedGrid = ({ gridSize, guess, isRevealing }: Props) => {
           position={i}
           status={statuses[i]}
           isRevealing={isRevealing}
+          isDecreasedFontSize={isDecreasedFontSize}
         />
       ))}
     </div>

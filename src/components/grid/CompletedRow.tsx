@@ -7,6 +7,7 @@ type Props = {
   isRevealing?: boolean
   position: number
   status: CharStatus[]
+  isDecreasedFontSize?: boolean
 }
 
 export const CompletedRow = ({
@@ -14,6 +15,7 @@ export const CompletedRow = ({
   isRevealing,
   position,
   status,
+  isDecreasedFontSize,
 }: Props) => {
   const splitGuess = unicodeSplit(guess)
 
@@ -27,6 +29,7 @@ export const CompletedRow = ({
           position={position + i}
           isRevealing={isRevealing}
           isCompleted
+          isDecreasedFontSize={isDecreasedFontSize}
         />
       ))}
     </div>

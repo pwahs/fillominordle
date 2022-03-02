@@ -5,9 +5,15 @@ type Props = {
   guess: string
   gridSize: number
   className: string
+  isDecreasedFontSize?: boolean
 }
 
-export const CurrentRow = ({ guess, className, gridSize }: Props) => {
+export const CurrentRow = ({
+  guess,
+  className,
+  gridSize,
+  isDecreasedFontSize,
+}: Props) => {
   const splitGuess = unicodeSplit(guess)
   const emptyCells = Array.from(Array(gridSize - splitGuess.length))
   const classes = `flex justify-center mb-1 ${className}`
@@ -15,10 +21,14 @@ export const CurrentRow = ({ guess, className, gridSize }: Props) => {
   return (
     <div className={classes}>
       {splitGuess.map((letter, i) => (
-        <Cell key={i} value={letter} />
+        <Cell
+          key={i}
+          value={letter}
+          isDecreasedFontSize={isDecreasedFontSize}
+        />
       ))}
       {emptyCells.map((_, i) => (
-        <Cell key={i} />
+        <Cell key={i} isDecreasedFontSize={isDecreasedFontSize} />
       ))}
     </div>
   )

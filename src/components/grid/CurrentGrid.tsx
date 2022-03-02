@@ -5,9 +5,15 @@ type Props = {
   gridSize: number
   guess: string
   className: string
+  isDecreasedFontSize?: boolean
 }
 
-export const CurrentGrid = ({ gridSize, guess, className }: Props) => {
+export const CurrentGrid = ({
+  gridSize,
+  guess,
+  className,
+  isDecreasedFontSize,
+}: Props) => {
   const rows = splitGuess(guess, gridSize)
   const classes = `flex justify-center mb-3 mx-1.5 column ${className}`
 
@@ -19,6 +25,7 @@ export const CurrentGrid = ({ gridSize, guess, className }: Props) => {
           gridSize={gridSize}
           className={className}
           key={i}
+          isDecreasedFontSize={isDecreasedFontSize}
         />
       ))}
     </div>

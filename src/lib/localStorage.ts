@@ -1,5 +1,6 @@
 const gameStateKey = 'gameState'
 const highContrastKey = 'highContrast'
+const decreasedFontSizeKey = 'decreasedFontSize'
 const gridSizeKey = 'gridSize'
 
 type StoredGameState = {
@@ -50,6 +51,19 @@ export const setStoredIsHighContrastMode = (isHighContrast: boolean) => {
 export const getStoredIsHighContrastMode = () => {
   const highContrast = localStorage.getItem(highContrastKey)
   return highContrast === '1'
+}
+
+export const setStoredIsDecreasedFontSize = (isDecreasedFontSize: boolean) => {
+  if (isDecreasedFontSize) {
+    localStorage.setItem(decreasedFontSizeKey, '1')
+  } else {
+    localStorage.removeItem(decreasedFontSizeKey)
+  }
+}
+
+export const getStoredIsDecreasedFontSize = () => {
+  const decreasedFontSize = localStorage.getItem(decreasedFontSizeKey)
+  return decreasedFontSize === '1'
 }
 
 export const setStoredGridSize = (gridSize: number) => {

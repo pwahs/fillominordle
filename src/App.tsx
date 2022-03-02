@@ -31,10 +31,12 @@ import {
 import { useAlert } from './context/AlertContext'
 import {
   getStoredGridSize,
+  getStoredIsDecreasedFontSize,
   getStoredIsHighContrastMode,
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
   setStoredGridSize,
+  setStoredIsDecreasedFontSize,
   setStoredIsHighContrastMode,
 } from './lib/localStorage'
 import { addStatsForCompletedGame, loadStats } from './lib/stats'
@@ -73,6 +75,9 @@ function App() {
   )
   const [isHighContrastMode, setIsHighContrastMode] = useState(
     getStoredIsHighContrastMode()
+  )
+  const [isDecreasedFontSize, setIsDecreasedFontSize] = useState(
+    getStoredIsDecreasedFontSize()
   )
   const [gridSize, setGridSize] = useState(getStoredGridSize())
   const [isRevealing, setIsRevealing] = useState(false)
@@ -145,6 +150,11 @@ function App() {
   const handleHighContrastMode = (isHighContrast: boolean) => {
     setIsHighContrastMode(isHighContrast)
     setStoredIsHighContrastMode(isHighContrast)
+  }
+
+  const handleDecreasedFontSize = (isHighContrast: boolean) => {
+    setIsDecreasedFontSize(isHighContrast)
+    setStoredIsDecreasedFontSize(isHighContrast)
   }
 
   const handleGridSize = (gridSize: number) => {
@@ -309,6 +319,7 @@ function App() {
         isRevealing={isRevealing}
         currentRowClassName={currentRowClass}
         gridSize={gridSize}
+        isDecreasedFontSize={isDecreasedFontSize}
       />
       <Keyboard
         onChar={onChar}
@@ -341,6 +352,8 @@ function App() {
         handleDarkMode={handleDarkMode}
         isHighContrastMode={isHighContrastMode}
         handleHighContrastMode={handleHighContrastMode}
+        isDecreasedFontSize={isDecreasedFontSize}
+        handleDecreasedFontSize={handleDecreasedFontSize}
       />
 
       <AlertContainer />

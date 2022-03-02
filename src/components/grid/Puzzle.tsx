@@ -9,6 +9,7 @@ type Props = {
   isRevealing?: boolean
   currentRowClassName: string
   gridSize: number
+  isDecreasedFontSize?: boolean
 }
 
 export const Puzzle = ({
@@ -17,6 +18,7 @@ export const Puzzle = ({
   isRevealing,
   currentRowClassName,
   gridSize,
+  isDecreasedFontSize,
 }: Props) => {
   const empties =
     guesses.length < MAX_CHALLENGES(gridSize) - 1
@@ -31,6 +33,7 @@ export const Puzzle = ({
           gridSize={gridSize}
           guess={guess}
           isRevealing={isRevealing && guesses.length - 1 === i}
+          isDecreasedFontSize={isDecreasedFontSize}
         />
       ))}
       {guesses.length < MAX_CHALLENGES(gridSize) && (
@@ -38,10 +41,15 @@ export const Puzzle = ({
           gridSize={gridSize}
           guess={currentGuess}
           className={currentRowClassName}
+          isDecreasedFontSize={isDecreasedFontSize}
         />
       )}
       {empties.map((_, i) => (
-        <EmptyGrid gridSize={gridSize} key={i} />
+        <EmptyGrid
+          gridSize={gridSize}
+          key={i}
+          isDecreasedFontSize={isDecreasedFontSize}
+        />
       ))}
     </div>
   )

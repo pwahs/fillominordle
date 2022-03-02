@@ -8,6 +8,8 @@ type Props = {
   handleDarkMode: Function
   isHighContrastMode: boolean
   handleHighContrastMode: Function
+  isDecreasedFontSize: boolean
+  handleDecreasedFontSize: Function
 }
 
 export const SettingsModal = ({
@@ -17,6 +19,8 @@ export const SettingsModal = ({
   handleDarkMode,
   isHighContrastMode,
   handleHighContrastMode,
+  isDecreasedFontSize,
+  handleDecreasedFontSize,
 }: Props) => {
   return (
     <BaseModal title="Settings" isOpen={isOpen} handleClose={handleClose}>
@@ -30,6 +34,11 @@ export const SettingsModal = ({
           settingName="High Contrast Mode"
           flag={isHighContrastMode}
           handleFlag={handleHighContrastMode}
+        />
+        <SettingsToggle
+          settingName="Decreased Font Size"
+          flag={isDecreasedFontSize}
+          handleFlag={handleDecreasedFontSize}
         />
       </div>
     </BaseModal>
