@@ -6,6 +6,8 @@ type Props = {
   guess: string
   className: string
   isDecreasedFontSize?: boolean
+  cursor?: number
+  setCursor?: (position: number) => void
 }
 
 export const CurrentGrid = ({
@@ -13,6 +15,8 @@ export const CurrentGrid = ({
   guess,
   className,
   isDecreasedFontSize,
+  cursor,
+  setCursor,
 }: Props) => {
   const rows = splitGuess(guess, gridSize)
   const classes = `flex justify-center mb-3 mx-1.5 column ${className}`
@@ -26,6 +30,9 @@ export const CurrentGrid = ({
           className={className}
           key={i}
           isDecreasedFontSize={isDecreasedFontSize}
+          rowNumber={i}
+          setCursor={setCursor}
+          cursor={cursor}
         />
       ))}
     </div>

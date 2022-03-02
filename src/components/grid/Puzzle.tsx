@@ -10,6 +10,8 @@ type Props = {
   currentRowClassName: string
   gridSize: number
   isDecreasedFontSize?: boolean
+  cursor?: number
+  setCursor?: (position: number) => void
 }
 
 export const Puzzle = ({
@@ -19,6 +21,8 @@ export const Puzzle = ({
   currentRowClassName,
   gridSize,
   isDecreasedFontSize,
+  cursor,
+  setCursor,
 }: Props) => {
   const empties =
     guesses.length < MAX_CHALLENGES(gridSize) - 1
@@ -42,6 +46,8 @@ export const Puzzle = ({
           guess={currentGuess}
           className={currentRowClassName}
           isDecreasedFontSize={isDecreasedFontSize}
+          cursor={cursor}
+          setCursor={setCursor}
         />
       )}
       {empties.map((_, i) => (

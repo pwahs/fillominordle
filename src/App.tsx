@@ -80,6 +80,7 @@ function App() {
     getStoredIsDecreasedFontSize()
   )
   const [gridSize, setGridSize] = useState(getStoredGridSize())
+  const [cursor, setCursor] = useState(0)
   const [isRevealing, setIsRevealing] = useState(false)
   const [guesses, setGuesses] = useState<{ [gridSize: number]: string[] }>(
     () => {
@@ -190,16 +191,22 @@ function App() {
   }, [gridSize, isGameWon, isGameLost, showSuccessAlert])
 
   const onChar = (value: string) => {
-    if (
-      unicodeLength(`${currentGuesses[gridSize]}${value}`) <=
-        gridSize * gridSize &&
-      guesses[gridSize].length < MAX_CHALLENGES(gridSize) &&
-      !isGameWon[gridSize]
-    ) {
+    if (!isGameLost[gridSize] && !isGameWon[gridSize]) {
+      let guess = currentGuesses[gridSize]
+      while (guess.length < cursor) {
+        guess = `${guess}?`
+      }
+      guess = `${guess.substring(0, cursor)}${value}${guess.substring(
+        cursor + 1
+      )}`
       setCurrentGuesses({
         ...currentGuesses,
-        [gridSize]: `${currentGuesses[gridSize]}${value}`,
+        [gridSize]: guess,
       })
+    }
+
+    if (cursor < gridSize * gridSize - 1) {
+      setCursor(cursor + 1)
     }
   }
 
@@ -320,6 +327,8 @@ function App() {
         currentRowClassName={currentRowClass}
         gridSize={gridSize}
         isDecreasedFontSize={isDecreasedFontSize}
+        cursor={cursor}
+        setCursor={setCursor}
       />
       <Keyboard
         onChar={onChar}
