@@ -3,7 +3,7 @@ import { StatBar } from '../stats/StatBar'
 import { Histogram } from '../stats/Histogram'
 import { GameStats } from '../../lib/localStorage'
 import { shareStatus } from '../../lib/share'
-import { tomorrow } from '../../lib/guesses'
+import { solutionIndex, tomorrow } from '../../lib/guesses'
 import { BaseModal } from './BaseModal'
 import {
   STATISTICS_TITLE,
@@ -40,7 +40,7 @@ export const StatsModal = ({
   if (gameStats.totalGames[gridSize] <= 0) {
     return (
       <BaseModal
-        title={STATISTICS_TITLE(gridSize)}
+        title={STATISTICS_TITLE(gridSize, solutionIndex)}
         isOpen={isOpen}
         handleClose={handleClose}
       >
@@ -50,7 +50,7 @@ export const StatsModal = ({
   }
   return (
     <BaseModal
-      title={STATISTICS_TITLE(gridSize)}
+      title={STATISTICS_TITLE(gridSize, solutionIndex)}
       isOpen={isOpen}
       handleClose={handleClose}
     >

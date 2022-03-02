@@ -82,9 +82,10 @@ export const localeAwareUpperCase = (text: string) => {
 
 const getPuzzlesOfDay = () => {
   // January 1, 2022 Game Epoch
-  const epochMs = new Date('January 1, 2022 00:00:00').valueOf()
+  // WTF, Javascript, what are you doing? 0-11 for months, 1-31 for days???
+  const epochMs = Date.UTC(2022, 0, 1, 0, 0, 0, 0)
   const now = Date.now()
-  const msInDay = 86400000
+  const msInDay = 864
   const index = Math.floor((now - epochMs) / msInDay)
   const nextday = (index + 1) * msInDay + epochMs
 
