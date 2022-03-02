@@ -85,7 +85,7 @@ const getPuzzlesOfDay = () => {
   // WTF, Javascript, what are you doing? 0-11 for months, 1-31 for days???
   const epochMs = Date.UTC(2022, 0, 1, 0, 0, 0, 0)
   const now = Date.now()
-  const msInDay = 864
+  const msInDay = 86400000
   const index = Math.floor((now - epochMs) / msInDay)
   const nextday = (index + 1) * msInDay + epochMs
 
