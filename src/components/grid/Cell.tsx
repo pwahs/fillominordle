@@ -55,7 +55,6 @@ export const Cell = ({
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     onClick?.(position)
-    console.log(position)
     event.currentTarget.blur()
   }
 

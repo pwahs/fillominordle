@@ -34,7 +34,6 @@ export const Keyboard = ({
       onEnter()
     } else if (value === 'DELETE') {
       onDelete()
-      console.log('DELETE')
     } else {
       onChar(value)
     }

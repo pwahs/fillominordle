@@ -45,7 +45,7 @@ import {
   solutions,
   unicodeLength,
 } from './lib/guesses'
-import _ from 'lodash'
+import _, { cloneDeep } from 'lodash'
 
 function App() {
   const prefersDarkMode = window.matchMedia(
@@ -58,7 +58,9 @@ function App() {
     [gridSize: number]: string
   }>(Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, ''])))
   const [isGameWon, setIsGameWon] = useState<{ [gridSize: number]: boolean }>(
-    Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, false]))
+    () => {
+      return Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, false]))
+    }
   )
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
@@ -84,34 +86,31 @@ function App() {
   const [guesses, setGuesses] = useState<{ [gridSize: number]: string[] }>(
     () => {
       const loaded = loadGameStateFromLocalStorage()
-      console.log(loaded)
       if (!loaded || !_.isEqual(loaded.solutions, solutions)) {
         return Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, []]))
       }
+      let tempIsGameWon = cloneDeep(isGameWon)
+      let tempIsGameLost = cloneDeep(isGameLost)
       GRID_SIZES.map((gridSize) => {
         const gameWasWon = loaded.guesses[gridSize].includes(
           solutions[gridSize]
         )
         if (gameWasWon) {
-          setIsGameWon({
-            ...isGameWon,
-            [gridSize]: true,
-          })
+          tempIsGameWon = { ...tempIsGameWon, [gridSize]: true }
         }
         if (
           loaded.guesses[gridSize].length === MAX_CHALLENGES(gridSize) &&
           !gameWasWon
         ) {
-          setIsGameLost({
-            ...isGameLost,
-            [gridSize]: true,
-          })
+          tempIsGameLost = { ...tempIsGameLost, [gridSize]: true }
           showErrorAlert(CORRECT_WORD_MESSAGE(solutions[gridSize], gridSize), {
             persist: true,
           })
         }
         return null
       })
+      setIsGameWon(tempIsGameWon)
+      setIsGameLost(tempIsGameLost)
       return loaded.guesses
     }
   )
