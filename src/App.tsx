@@ -308,6 +308,12 @@ function App() {
     }
   }
 
+  const onMove = (value: number) => {
+    if (cursor + value >= 0 && cursor + value < gridSize * gridSize) {
+      setCursor(cursor + value)
+    }
+  }
+
   return (
     <div className="flex column h-screen pt-2 pb-2 max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div className="flex w-80 mx-auto items-center mb-3 mt-5">
@@ -350,6 +356,7 @@ function App() {
         onChar={onChar}
         onDelete={onDelete}
         onEnter={onEnter}
+        onMove={onMove}
         guesses={guesses[gridSize]}
         isRevealing={isRevealing}
         gridSize={gridSize}

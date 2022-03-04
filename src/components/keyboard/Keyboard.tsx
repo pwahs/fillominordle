@@ -9,6 +9,7 @@ type Props = {
   onChar: (value: string) => void
   onDelete: () => void
   onEnter: () => void
+  onMove: (value: number) => void
   guesses: string[]
   isRevealing?: boolean
   gridSize: number
@@ -18,6 +19,7 @@ export const Keyboard = ({
   onChar,
   onDelete,
   onEnter,
+  onMove,
   guesses,
   isRevealing,
   gridSize,
@@ -42,6 +44,14 @@ export const Keyboard = ({
         onEnter()
       } else if (e.code === 'Backspace') {
         onDelete()
+      } else if (e.code === 'ArrowUp') {
+        onMove(-gridSize)
+      } else if (e.code === 'ArrowDown') {
+        onMove(+gridSize)
+      } else if (e.code === 'ArrowLeft') {
+        onMove(-1)
+      } else if (e.code === 'ArrowRight') {
+        onMove(+1)
       } else {
         const key = localeAwareUpperCase(e.key)
         if (key.length === 1 && key >= '1' && key <= '9') {
