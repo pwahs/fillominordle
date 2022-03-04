@@ -10,6 +10,7 @@ type Props = {
   onDelete: () => void
   onEnter: () => void
   onMove: (value: number) => void
+  onSpace: () => void
   guesses: string[]
   isRevealing?: boolean
   gridSize: number
@@ -20,6 +21,7 @@ export const Keyboard = ({
   onDelete,
   onEnter,
   onMove,
+  onSpace,
   guesses,
   isRevealing,
   gridSize,
@@ -52,6 +54,8 @@ export const Keyboard = ({
         onMove(-1)
       } else if (e.code === 'ArrowRight') {
         onMove(+1)
+      } else if (e.code === 'Space') {
+        onSpace()
       } else {
         const key = localeAwareUpperCase(e.key)
         if (key.length === 1 && key >= '1' && key <= '9') {

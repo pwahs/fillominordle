@@ -194,7 +194,7 @@ function App() {
     }
   }, [gridSize, isGameWon, isGameLost, showSuccessAlert])
 
-  const onChar = (value: string) => {
+  const insertChar = (value: string) => {
     if (!isGameLost[gridSize] && !isGameWon[gridSize]) {
       let guess = currentGuesses[gridSize]
       while (guess.length < cursor) {
@@ -208,10 +208,18 @@ function App() {
         [gridSize]: guess,
       })
     }
+  }
+
+  const onChar = (value: string) => {
+    insertChar(value)
 
     if (cursor < gridSize * gridSize - 1) {
       setCursor(cursor + 1)
     }
+  }
+
+  const onSpace = () => {
+    insertChar('?')
   }
 
   const onDelete = () => {
@@ -357,6 +365,7 @@ function App() {
         onDelete={onDelete}
         onEnter={onEnter}
         onMove={onMove}
+        onSpace={onSpace}
         guesses={guesses[gridSize]}
         isRevealing={isRevealing}
         gridSize={gridSize}
