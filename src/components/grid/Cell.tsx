@@ -26,7 +26,7 @@ export const Cell = ({
 }: Props) => {
   const isFilled = value && value !== '?' && !isCompleted
   const shouldReveal = isRevealing && isCompleted
-  const animationDelay = isRevealing ? `${position * REVEAL_TIME_MS}ms` : "0ms"
+  const animationDelay = isRevealing ? `${position * REVEAL_TIME_MS}ms` : '0ms'
   const isHighContrast = getStoredIsHighContrastMode()
 
   const classes = classnames(
