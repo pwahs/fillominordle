@@ -7,7 +7,7 @@ type Props = {
   guesses: string[]
   currentGuess: string
   isRevealing?: boolean
-  currentRowClassName: string
+  currentGridClassName: string
   gridSize: number
   isDecreasedFontSize?: boolean
   cursor?: number
@@ -18,7 +18,7 @@ export const Puzzle = ({
   guesses,
   currentGuess,
   isRevealing,
-  currentRowClassName,
+  currentGridClassName,
   gridSize,
   isDecreasedFontSize,
   cursor,
@@ -44,7 +44,7 @@ export const Puzzle = ({
         <CurrentGrid
           gridSize={gridSize}
           guess={currentGuess}
-          className={currentRowClassName}
+          className={currentGridClassName}
           isDecreasedFontSize={isDecreasedFontSize}
           cursor={cursor}
           setCursor={setCursor}

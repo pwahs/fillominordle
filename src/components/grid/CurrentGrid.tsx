@@ -27,7 +27,6 @@ export const CurrentGrid = ({
         <CurrentRow
           guess={row}
           gridSize={gridSize}
-          className={className}
           key={i}
           isDecreasedFontSize={isDecreasedFontSize}
           rowNumber={i}

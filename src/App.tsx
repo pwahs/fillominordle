@@ -64,7 +64,7 @@ function App() {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
-  const [currentRowClass, setCurrentRowClass] = useState('')
+  const [currentGridClass, setCurrentGridClass] = useState('')
   const [isGameLost, setIsGameLost] = useState<{ [gridSize: number]: boolean }>(
     Object.fromEntries(GRID_SIZES.map((gridSize) => [gridSize, false]))
   )
@@ -168,7 +168,7 @@ function App() {
   }
 
   const clearCurrentRowClass = () => {
-    setCurrentRowClass('')
+    setCurrentGridClass('')
   }
 
   useEffect(() => {
@@ -220,6 +220,9 @@ function App() {
     }
     let toDelete = cursor - 1
     let guess = currentGuesses[gridSize]
+    if (guess.length > cursor && guess[cursor] !== '?') {
+      toDelete = cursor
+    }
     while (guess.length < toDelete) {
       guess = `${guess}?`
     }
@@ -237,14 +240,14 @@ function App() {
     }
 
     if (!(unicodeLength(currentGuesses[gridSize]) === gridSize * gridSize)) {
-      setCurrentRowClass('jiggle')
+      setCurrentGridClass('jiggle')
       return showErrorAlert(NOT_ENOUGH_LETTERS_MESSAGE, {
         onClose: clearCurrentRowClass,
       })
     }
 
     if (!isGuessValid(gridSize, currentGuesses[gridSize])) {
-      setCurrentRowClass('jiggle')
+      setCurrentGridClass('jiggle')
       return showErrorAlert(GUESS_INVALID_MESSAGE, {
         onClose: clearCurrentRowClass,
       })
@@ -335,10 +338,12 @@ function App() {
         guesses={guesses[gridSize]}
         currentGuess={currentGuesses[gridSize]}
         isRevealing={isRevealing}
-        currentRowClassName={currentRowClass}
+        currentGridClassName={currentGridClass}
         gridSize={gridSize}
         isDecreasedFontSize={isDecreasedFontSize}
-        cursor={cursor}
+        cursor={
+          !isGameWon[gridSize] && !isGameLost[gridSize] ? cursor : undefined
+        }
         setCursor={setCursor}
       />
       <Keyboard
