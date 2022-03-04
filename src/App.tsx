@@ -3,7 +3,6 @@ import {
   CogIcon,
   InformationCircleIcon,
 } from '@heroicons/react/outline'
-import { default as GraphemeSplitter } from 'grapheme-splitter'
 import { useEffect, useState } from 'react'
 import './App.css'
 import { AlertContainer } from './components/alerts/AlertContainer'

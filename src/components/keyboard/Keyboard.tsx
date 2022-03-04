@@ -67,7 +67,7 @@ export const Keyboard = ({
     return () => {
       window.removeEventListener('keyup', listener)
     }
-  }, [onEnter, onDelete, onChar])
+  }, [onEnter, onDelete, onChar, onMove, onSpace, gridSize])
 
   return (
     <div className="mt-3">
