@@ -190,7 +190,8 @@ function App() {
         setIsStatsModalOpen(true)
       }, GAME_END_DELAY(gridSize))
     }
-  }, [gridSize, isGameWon, isGameLost, showSuccessAlert])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGameWon, isGameLost, showSuccessAlert])
 
   const insertChar = (value: string) => {
     if (!isGameLost[gridSize] && !isGameWon[gridSize]) {
