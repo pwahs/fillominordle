@@ -36,6 +36,10 @@ type RadioButtonProps = {
   checked: boolean
 }
 
+const onFocus: React.FocusEventHandler<HTMLInputElement> = (event) => {
+  event.currentTarget.blur()
+}
+
 const RadioButton = ({
   name,
   label,
@@ -51,6 +55,7 @@ const RadioButton = ({
         value={label}
         className="mr-1"
         checked={checked}
+        onFocus={onFocus}
       />
       <label>{label}</label>
     </div>

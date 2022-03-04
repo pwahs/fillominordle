@@ -68,7 +68,6 @@ export const Keyboard = ({
       window.removeEventListener('keyup', listener)
     }
   }, [onEnter, onDelete, onChar, onMove, onSpace, gridSize])
-
   return (
     <div className="mt-3">
       <div className="flex justify-center mb-1">
@@ -109,16 +108,3 @@ export const Keyboard = ({
     </div>
   )
 }
-
-//</div><div className="flex justify-center mb-1">
-//</div>{['7', '8', '9'].map((key) => (
-//</div><Key
-//</div>value={key}
-//</div>key={key}
-//</div>onClick={onClick}
-//</div>status={charStatuses[key]}
-//</div>isRevealing={isRevealing}
-//</div>keyDelayMs={keyDelayMs}
-//</div>/>
-//</div>))}
-//</div></div>
