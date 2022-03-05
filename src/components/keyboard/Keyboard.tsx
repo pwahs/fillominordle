@@ -44,8 +44,6 @@ export const Keyboard = ({
       if (e.code === 'Enter') {
         onEnter()
       } else if (e.code === 'Backspace') {
-        console.log("backspace prevention...")
-        e.preventDefault()
         onDelete()
       } else if (e.code === 'ArrowUp') {
         onMove(-gridSize)
