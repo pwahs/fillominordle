@@ -41,18 +41,27 @@ export const Keyboard = ({
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
+      const numLock = e.getModifierState("NumLock") === false ? false : true
       if (e.code === 'Enter') {
         onEnter()
       } else if (e.code === 'Backspace') {
         onDelete()
-      } else if (e.code === 'ArrowUp') {
+      } else if (e.code === 'ArrowUp' || e.code === 'KeyW' || (e.code === 'Numpad8' && !numLock)) {
         onMove(-gridSize)
-      } else if (e.code === 'ArrowDown') {
+      } else if (e.code === 'ArrowDown' || e.code === 'KeyS' || (e.code === 'Numpad2' && !numLock)) {
         onMove(+gridSize)
-      } else if (e.code === 'ArrowLeft') {
+      } else if (e.code === 'ArrowLeft' || e.code === 'KeyA' || (e.code === 'Numpad4' && !numLock)) {
         onMove(-1)
-      } else if (e.code === 'ArrowRight') {
+      } else if (e.code === 'ArrowRight' || e.code === 'KeyD' || (e.code === 'Numpad6' && !numLock)) {
         onMove(+1)
+      } else if (e.code === 'Numpad7' && !numLock) {
+        onMove(-gridSize-1)
+      } else if (e.code === 'Numpad9' && !numLock) {
+        onMove(-gridSize+1)
+      } else if (e.code === 'Numpad3' && !numLock) {
+        onMove(+gridSize+1)
+      } else if (e.code === 'Numpad1' && !numLock) {
+        onMove(+gridSize-1)
       } else if (e.code === 'Space') {
         onSpace()
       } else {
