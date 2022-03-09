@@ -54,13 +54,13 @@ export const Keyboard = ({
         onMove(-1)
       } else if (e.code === 'ArrowRight' || e.code === 'KeyD' || (e.code === 'Numpad6' && !numLock)) {
         onMove(+1)
-      } else if (e.code === 'Numpad7' && !numLock) {
+      } else if (e.code === 'Home' || (e.code === 'Numpad7' && !numLock)) {
         onMove(-gridSize-1)
-      } else if (e.code === 'Numpad9' && !numLock) {
+      } else if (e.code === 'PageUp' || (e.code === 'Numpad9' && !numLock)) {
         onMove(-gridSize+1)
-      } else if (e.code === 'Numpad3' && !numLock) {
+      } else if (e.code === 'PageDown' || (e.code === 'Numpad3' && !numLock)) {
         onMove(+gridSize+1)
-      } else if (e.code === 'Numpad1' && !numLock) {
+      } else if (e.code === 'End' || (e.code === 'Numpad1' && !numLock)) {
         onMove(+gridSize-1)
       } else if (e.code === 'Space') {
         onSpace()
